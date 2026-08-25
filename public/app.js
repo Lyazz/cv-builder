@@ -8,7 +8,7 @@
 (() => {
   'use strict';
 
-  const API = '/api/cvs';
+  const API = '/api/cv';
 
   /* ---------- page geometry (px @96dpi) ---------- */
   const SHEET_H = 1123;
@@ -74,7 +74,6 @@
   });
 
   let cv = defaults();
-  let currentId = null;
   let dirty = false;
   let zoom = null;          // null = auto-fit
   let activePage = 0;
@@ -714,6 +713,12 @@
   /* =========================================================
      PERSISTENCE
      ========================================================= */
+  async function apiFetch(url, opts) {
+    const res = await fetch(url, opts);
+    if (res.status === 401) { window.location.href = '/login.html'; throw new Error('redirect'); }
+    return res;
+  }
+
   let toastT = null;
   function toast(msg) {
     const t = $('toast');
@@ -724,38 +729,25 @@
   function markClean() {
     dirty = false;
     $('saveDot').dataset.state = 'clean';
-    $('saveText').textContent = currentId ? 'Enregistré' : 'Non enregistré';
-    $('deleteBtn').disabled = !currentId;
+    $('saveText').textContent = 'Enregistré';
   }
 
   let autoT = null;
   function queueAutosave() {
-    if (!currentId) { $('deleteBtn').disabled = true; return; }
     clearTimeout(autoT);
     autoT = setTimeout(() => save(true), 1100);
   }
 
-  async function refreshList(selectId) {
-    const rows = await (await fetch(API)).json();
-    $('loadSelect').innerHTML = '<option value="">Nouveau CV</option>' +
-      rows.map((r) => `<option value="${r.id}">${esc(r.title)}</option>`).join('');
-    $('loadSelect').value = selectId ? String(selectId) : '';
-  }
-
   async function save(silent) {
     try {
-      const res = await fetch(currentId ? `${API}/${currentId}` : API, {
-        method: currentId ? 'PUT' : 'POST',
+      const res = await apiFetch(API, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(cv)
       });
       if (!res.ok) throw new Error('Enregistrement refusé par le serveur');
-      const data = await res.json();
-      const isNew = !currentId;
-      currentId = data.id;
-      await refreshList(currentId);
       markClean();
-      if (!silent) toast(isNew ? 'CV créé' : 'CV enregistré');
+      if (!silent) toast('CV enregistré');
     } catch (err) {
       toast(err.message);
     }
@@ -772,42 +764,37 @@
     return merged;
   }
 
-  async function load(id) {
-    if (!id) return newCv();
-    const res = await fetch(`${API}/${id}`);
-    if (!res.ok) return toast('CV introuvable');
+  async function loadCurrent() {
+    const res = await apiFetch(API);
+    if (!res.ok) return;
     const data = await res.json();
     cv = hydrate(data.data);
-    currentId = data.id;
     markClean();
     redraw();
-    toast('CV ouvert');
   }
 
   function newCv() {
-    cv = defaults(); currentId = null;
-    $('photoInput').value = ''; $('loadSelect').value = '';
-    markClean(); redraw();
+    cv = defaults();
+    $('photoInput').value = '';
+    touch(); redraw();
   }
 
   $('saveBtn').addEventListener('click', () => save(false));
   $('newBtn').addEventListener('click', () => {
-    if (dirty && !confirm('Les modifications non enregistrées seront perdues. Continuer ?')) return;
+    if (!confirm('Repartir d\'un CV vierge ? Le contenu actuel sera remplacé (et enregistré automatiquement).')) return;
     newCv();
   });
   $('deleteBtn').addEventListener('click', async () => {
-    if (!currentId || !confirm('Supprimer définitivement ce CV ?')) return;
-    const res = await fetch(`${API}/${currentId}`, { method: 'DELETE' });
-    if (res.ok || res.status === 204) { toast('CV supprimé'); newCv(); await refreshList(); }
+    if (!confirm('Supprimer définitivement ce CV ? Son code PIN redeviendra disponible.')) return;
+    const res = await apiFetch(API, { method: 'DELETE' });
+    if (res.ok || res.status === 204) window.location.href = '/login.html';
     else toast('Suppression impossible');
   });
-  $('loadSelect').addEventListener('change', (e) => {
-    if (dirty && !confirm('Les modifications non enregistrées seront perdues. Continuer ?')) {
-      e.target.value = currentId || ''; return;
-    }
-    load(e.target.value);
-  });
   $('exportBtn').addEventListener('click', () => window.print());
+  $('logoutBtn').addEventListener('click', async () => {
+    await fetch('/api/logout', { method: 'POST' });
+    window.location.href = '/login.html';
+  });
 
   // JSON in / out
   const slug = (s) => (String(s || 'cv').normalize('NFD').replace(/[̀-ͯ]/g, '')
@@ -831,10 +818,9 @@
       try { parsed = JSON.parse(r.result); }
       catch { return toast('Ce fichier n\'est pas un JSON valide'); }
       cv = hydrate(parsed);
-      currentId = null; $('loadSelect').value = '';
-      markClean(); $('saveText').textContent = 'Non enregistré';
+      touch();
       redraw();
-      toast('CV importé — enregistrez pour le conserver');
+      toast('CV importé — enregistrement automatique en cours');
     };
     r.readAsText(f);
   });
@@ -850,6 +836,10 @@
   /* ---------- go ---------- */
   markClean();
   redraw();
-  refreshList();
+  loadCurrent();
   document.fonts?.ready.then(paint);
+  if (sessionStorage.getItem('cv_justCreated')) {
+    sessionStorage.removeItem('cv_justCreated');
+    toast('Nouveau CV créé pour ce code — gardez-le précieusement');
+  }
 })();

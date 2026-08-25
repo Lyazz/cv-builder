@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CV Builder — Connexion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="login-body">
+
+<main class="login-screen">
+  <form class="login-card" id="loginForm" autocomplete="off">
+    <div class="brand login-brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">CV&nbsp;Builder</span>
+    </div>
+    <h1 class="login-title">Entrez votre code</h1>
+    <p class="login-sub">Code à 8 chiffres — nouveau code = nouveau CV</p>
+
+    <div class="pin-row" id="pinRow">
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box" data-i="0" autofocus />
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box" data-i="1" />
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box" data-i="2" />
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box" data-i="3" />
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box" data-i="4" />
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box" data-i="5" />
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box" data-i="6" />
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box" data-i="7" />
+    </div>
+
+    <p class="login-error" id="loginError" role="alert"></p>
+
+    <button type="submit" class="btn btn-accent btn-wide login-submit" id="loginSubmit">Se connecter</button>
+  </form>
+</main>
+
+<script src="login.js"></script>
+</body>
+</html>

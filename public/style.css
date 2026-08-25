@@ -883,6 +883,78 @@ input[type="color"] {
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 /* =========================================================
+   LOGIN
+   ========================================================= */
+.login-body {
+  background: var(--ink-800);
+  height: 100%;
+}
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.login-card {
+  width: 100%;
+  max-width: 360px;
+  background: var(--ink-900);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--r-lg);
+  padding: 32px 28px 28px;
+  text-align: center;
+  box-shadow: var(--shadow-sheet);
+}
+.login-brand { justify-content: center; margin-bottom: 22px; color: #fff; }
+.login-title { margin: 0 0 4px; font-size: 18px; font-weight: 700; color: #fff; }
+.login-sub {
+  margin: 0 0 22px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.42);
+}
+.pin-row { display: flex; gap: 7px; justify-content: center; }
+.pin-box {
+  width: 34px;
+  height: 44px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 19px;
+  font-weight: 600;
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.06);
+  color: #fff;
+  outline: none;
+  transition: border-color .13s, box-shadow .13s, background .13s;
+}
+.pin-box:hover { border-color: rgba(255,255,255,.3); }
+.pin-box:focus {
+  border-color: var(--accent, #4d7ea8);
+  background: rgba(255,255,255,.1);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent, #4d7ea8) 30%, transparent);
+}
+.login-error {
+  min-height: 16px;
+  margin: 14px 0 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #ff9c9c;
+}
+.login-submit { margin-top: 16px; }
+.login-card.shake { animation: login-shake .32s; }
+@keyframes login-shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+
+/* =========================================================
    RESPONSIVE
    ========================================================= */
 @media (max-width: 1180px) {
@@ -895,7 +967,17 @@ input[type="color"] {
   .pages { display: none; }
   .topbar { flex-wrap: wrap; height: auto; padding: 10px 14px; gap: 10px 14px; }
   .doc-state { order: 3; flex-basis: 100%; }
-  .topbar-actions { flex-wrap: wrap; }
+  /* flex-shrink:0 (base rule) keeps this at its max-content width forever,
+     which overflowed the viewport instead of wrapping. Giving it its own
+     full-width row — like .doc-state — lets it shrink to fit and wrap. */
+  .topbar-actions { flex-wrap: wrap; flex-shrink: 1; flex-basis: 100%; order: 4; }
+}
+
+@media (max-width: 480px) {
+  .rail { max-height: 68vh; }
+  .blk-grid { grid-template-columns: 1fr; }
+  .pin-row { gap: 5px; }
+  .pin-box { width: 30px; height: 40px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

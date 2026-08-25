@@ -18,16 +18,13 @@
   </div>
 
   <div class="doc-state">
-    <select id="loadSelect" class="doc-select" aria-label="Ouvrir un CV enregistré">
-      <option value="">Nouveau CV</option>
-    </select>
     <span class="save-dot" id="saveDot" data-state="clean"></span>
     <span class="save-text" id="saveText">Enregistré</span>
   </div>
 
   <div class="topbar-actions">
-    <button id="newBtn" class="btn btn-quiet">Nouveau</button>
-    <button id="deleteBtn" class="btn btn-quiet btn-danger" disabled>Supprimer</button>
+    <button id="newBtn" class="btn btn-quiet">Réinitialiser</button>
+    <button id="deleteBtn" class="btn btn-quiet btn-danger">Supprimer</button>
     <span class="rule" aria-hidden="true"></span>
     <button id="importJsonBtn" class="btn btn-quiet">Importer</button>
     <input type="file" id="importJsonInput" accept="application/json" hidden />
@@ -35,6 +32,8 @@
     <span class="rule" aria-hidden="true"></span>
     <button id="saveBtn" class="btn btn-solid">Enregistrer</button>
     <button id="exportBtn" class="btn btn-accent">Télécharger le PDF</button>
+    <span class="rule" aria-hidden="true"></span>
+    <button id="logoutBtn" class="btn btn-quiet">Déconnexion</button>
   </div>
 </header>
 
