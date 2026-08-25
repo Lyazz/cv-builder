@@ -253,7 +253,7 @@ input[type="text"], input[type="email"], input[type="date"], input[type="number"
 input:hover, textarea:hover, select:hover { border-color: var(--ink-200); }
 input:focus, textarea:focus, select:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 13%, transparent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.13);
   outline: none;
 }
 textarea { resize: vertical; line-height: 1.5; }
@@ -348,7 +348,7 @@ input[type="color"] {
   margin-bottom: 9px;
   transition: border-color .13s, background .13s;
 }
-.photo-drop.over { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, #fff); }
+.photo-drop.over { border-color: var(--accent); background: var(--tint-hover); }
 .photo-drop input[type="file"] {
   position: absolute; inset: 0;
   opacity: 0; cursor: pointer; width: 100%; height: 100%;
@@ -467,12 +467,11 @@ input[type="color"] {
   --paper-text: #414d5a;   /* running text */
   --paper-mute: #7b8794;   /* dates, secondary meta */
 
-  /* One tint ramp, mixed from whatever accent the user picked, so
-     the soft colour follows the hue instead of being a second
-     palette that only agrees with navy. */
-  --tint-1: color-mix(in srgb, var(--accent) 5%, #fff);    /* column wash, cards */
-  --tint-2: color-mix(in srgb, var(--accent) 11%, #fff);   /* fills */
-  --tint-3: color-mix(in srgb, var(--accent) 20%, #fff);   /* tag borders, rules */
+  /* --tint-1/2/3 (and --tint-hover, --tint-strong, --accent-rgb,
+     --on-accent-rgb below) are set from JS (applyAccent in app.js) as
+     plain hex/rgb, not declared here with color-mix() — html2canvas,
+     used for the PDF export, can't parse that function and throws on
+     any stylesheet rule that contains it. */
   --r-card: 10px;
   --r-tag: 7px;
 
@@ -538,7 +537,7 @@ input[type="color"] {
   overflow: hidden;
   background: #dde4ec;
   /* white against the eight swatches, dark against a pale pick */
-  border: 3px solid color-mix(in srgb, var(--on-accent, #fff) 92%, transparent);
+  border: 3px solid rgba(var(--on-accent-rgb, 255, 255, 255), 0.92);
 }
 .cv-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .cv-photo .ph {
@@ -546,7 +545,7 @@ input[type="color"] {
   color: #a9b5c2;
 }
 .cv-monogram {
-  border: 2px solid color-mix(in srgb, var(--on-accent, #fff) 38%, transparent);
+  border: 2px solid rgba(var(--on-accent-rgb, 255, 255, 255), 0.38);
   color: var(--on-accent, #fff);
   font-size: calc(46px * var(--ts, 1));
   font-weight: 700;
@@ -808,11 +807,11 @@ input[type="color"] {
   transition: border-color .14s, transform .14s;
 }
 .chip:hover { transform: translateY(-1px); border-color: rgba(255,255,255,.4); }
-.chip[aria-current="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent); }
+.chip[aria-current="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.45); }
 .chip .fill {
   position: absolute;
   left: 0; right: 0; bottom: 0;
-  background: color-mix(in srgb, var(--accent) 72%, #fff);
+  background: var(--tint-strong);
   transition: height .2s ease;
 }
 .chip .num {
@@ -936,7 +935,7 @@ input[type="color"] {
 .pin-box:focus {
   border-color: var(--accent, #4d7ea8);
   background: rgba(255,255,255,.1);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent, #4d7ea8) 30%, transparent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 77, 126, 168), 0.3);
 }
 .login-error {
   min-height: 16px;

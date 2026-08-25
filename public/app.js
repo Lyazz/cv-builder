@@ -99,6 +99,15 @@
     const to = (v) => Math.round(v * (1 - amt)).toString(16).padStart(2, '0');
     return `#${to(r)}${to(g)}${to(b)}`;
   }
+  // Blends hexA toward hexB by t (0 = hexA, 1 = hexB) — same math as
+  // CSS color-mix(), computed in JS because html2canvas's CSS parser
+  // (used for the PDF export) doesn't understand color-mix() and
+  // throws on any stylesheet rule that contains it.
+  function mix(hexA, hexB, t) {
+    const a = hexToRgb(hexA), b = hexToRgb(hexB);
+    const to = (x, y) => Math.round(x + (y - x) * t).toString(16).padStart(2, '0');
+    return `#${to(a.r, b.r)}${to(a.g, b.g)}${to(a.b, b.b)}`;
+  }
   // WCAG relative luminance → contrast against the white page.
   function luminance(hex) {
     const { r, g, b } = hexToRgb(hex);
@@ -123,9 +132,22 @@
   }
   function applyAccent(hex) {
     const root = document.documentElement.style;
+    const on = onAccent(hex);
+    const { r, g, b } = hexToRgb(hex);
+    const onRgb = hexToRgb(on);
     root.setProperty('--accent', hex);
     root.setProperty('--accent-ink', readableInk(hex));
-    root.setProperty('--on-accent', onAccent(hex));
+    root.setProperty('--on-accent', on);
+    // "r, g, b" tokens for rgba(var(--accent-rgb), alpha) — replaces
+    // color-mix(var(--accent) X%, transparent), which html2canvas can't parse.
+    root.setProperty('--accent-rgb', `${r}, ${g}, ${b}`);
+    root.setProperty('--on-accent-rgb', `${onRgb.r}, ${onRgb.g}, ${onRgb.b}`);
+    // Same reason: precomputed opaque blends instead of color-mix(accent, #fff).
+    root.setProperty('--tint-1', mix(hex, '#ffffff', 0.95));
+    root.setProperty('--tint-2', mix(hex, '#ffffff', 0.89));
+    root.setProperty('--tint-3', mix(hex, '#ffffff', 0.80));
+    root.setProperty('--tint-hover', mix(hex, '#ffffff', 0.94));
+    root.setProperty('--tint-strong', mix(hex, '#ffffff', 0.28));
   }
 
   /* =========================================================
@@ -799,13 +821,21 @@
       const { jsPDF } = window.jspdf;
       const pdf = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
       for (let i = 0; i < sheets.length; i++) {
-        const canvas = await html2canvas(sheets[i], { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+        // On a flaky connection html2canvas can stall indefinitely trying to
+        // re-read an external stylesheet (Google Fonts) for CSSOM access —
+        // a hard timeout turns that into a clear failure instead of a dead
+        // button with no feedback.
+        const canvas = await Promise.race([
+          html2canvas(sheets[i], { scale: 2, backgroundColor: '#ffffff', useCORS: true }),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 15000)),
+        ]);
         if (i > 0) pdf.addPage('a4', 'p');
         pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
       }
       pdf.save(`${slug(cv.fullName)}.pdf`);
     } catch (err) {
-      toast('Échec de la génération du PDF');
+      console.error('export PDF failed', err);
+      toast('Échec de la génération du PDF — vérifiez votre connexion et réessayez');
     } finally {
       stack.style.transform = prevTransform;
       btn.disabled = false;
