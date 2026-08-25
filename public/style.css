@@ -1,0 +1,929 @@
+/* =========================================================
+   CV Builder
+   The chrome is deliberately near-monochrome: the only real
+   colour in the room is the accent the user picks, and it
+   only ever appears on the paper (plus the one active state
+   that ties the tools to the document).
+   ========================================================= */
+
+:root {
+  /* user accent — overwritten from JS */
+  --accent: #1c3d5e;
+
+  /* graphite scale */
+  --ink-900: #12161b;
+  --ink-800: #1b2027;
+  --ink-700: #2b333d;
+  --ink-500: #66707c;
+  --ink-400: #8b95a1;
+  --ink-200: #c9d0d8;
+  --line: #e4e8ed;
+  --line-soft: #eef1f4;
+  --surface: #ffffff;
+  --well: #f6f7f9;
+
+  --r-sm: 6px;
+  --r-md: 9px;
+  --r-lg: 14px;
+
+  --rail-w: 396px;
+  --pages-w: 92px;
+  --topbar-h: 58px;
+
+  --shadow-rail: 0 1px 2px rgba(18, 22, 27, .05);
+  --shadow-sheet: 0 2px 4px rgba(0,0,0,.25), 0 18px 48px rgba(0,0,0,.38);
+
+  --ui: "Archivo", system-ui, -apple-system, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--ink-800);
+  color: var(--ink-900);
+  font-family: var(--ui);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* micro-label: the utility voice of the interface */
+.mono, .card-title, .pages-label, .switch span, .seg-btn, .mono-val, .f label, .f-label-static, .blk-f label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .085em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+.topbar {
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 16px;
+  background: var(--ink-900);
+  color: #fff;
+  position: relative;
+  z-index: 30;
+}
+
+.brand { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
+.brand-mark {
+  width: 15px; height: 20px;
+  border-radius: 2px;
+  background: #fff;
+  position: relative;
+  box-shadow: 4px -4px 0 -1px rgba(255,255,255,.28);
+}
+.brand-name { font-weight: 700; font-size: 14.5px; letter-spacing: -.01em; }
+
+.doc-state {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  flex: 1;
+}
+.doc-select {
+  height: 32px;
+  max-width: 230px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.06);
+  color: #fff;
+  border-radius: var(--r-sm);
+  padding: 0 8px;
+  font-size: 13px;
+  min-width: 0;
+}
+.doc-select option { color: #12161b; }
+
+.save-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #4c9a6a;
+  flex-shrink: 0;
+}
+.save-dot[data-state="dirty"] { background: #d09a3c; }
+.save-text {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  white-space: nowrap;
+}
+
+.topbar-actions { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+.rule { width: 1px; height: 20px; background: rgba(255,255,255,.14); }
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.btn {
+  height: 33px;
+  padding: 0 13px;
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .13s, border-color .13s, color .13s, opacity .13s;
+}
+.btn:disabled { opacity: .34; cursor: not-allowed; }
+
+.topbar .btn-quiet {
+  background: transparent;
+  color: rgba(255,255,255,.74);
+  border-color: rgba(255,255,255,.15);
+}
+.topbar .btn-quiet:hover:not(:disabled) { background: rgba(255,255,255,.09); color: #fff; }
+.topbar .btn-danger:hover:not(:disabled) { background: rgba(214,90,90,.16); border-color: rgba(214,90,90,.4); color: #ffb4b4; }
+
+.btn-solid { background: rgba(255,255,255,.13); color: #fff; border-color: rgba(255,255,255,.2); }
+.btn-solid:hover:not(:disabled) { background: rgba(255,255,255,.2); }
+
+.btn-accent { background: var(--accent); color: #fff; }
+.btn-accent:hover:not(:disabled) { filter: brightness(1.14); }
+
+.rail .btn-quiet {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink-700);
+}
+.rail .btn-quiet:hover { background: var(--well); }
+.btn-wide { width: 100%; }
+
+.btn-add {
+  width: 100%;
+  margin-top: 10px;
+  height: 34px;
+  background: var(--surface);
+  border: 1px dashed var(--ink-200);
+  color: var(--ink-500);
+  font-size: 12.5px;
+}
+.btn-add:hover { border-color: var(--accent); color: var(--accent); border-style: solid; }
+
+/* =========================================================
+   APP SHELL
+   ========================================================= */
+.app {
+  display: grid;
+  grid-template-columns: var(--rail-w) minmax(0, 1fr) var(--pages-w);
+  height: calc(100vh - var(--topbar-h));
+}
+
+/* =========================================================
+   TOOL RAIL
+   ========================================================= */
+.rail {
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--line);
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--line);
+  padding: 0 12px;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.tab {
+  border: none;
+  background: none;
+  padding: 13px 10px 11px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-400);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.tab:hover { color: var(--ink-700); }
+.tab.active { color: var(--ink-900); border-bottom-color: var(--accent); }
+
+.rail-scroll { overflow-y: auto; padding: 14px 14px 40px; flex: 1; min-height: 0; }
+.tab-panel { display: none; flex-direction: column; gap: 12px; }
+.tab-panel.active { display: flex; }
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow-rail);
+}
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 11px; }
+.card-title { margin: 0 0 11px; color: var(--ink-500); }
+.card-head .card-title { margin: 0; }
+
+.f { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.f:last-child { margin-bottom: 0; }
+.f label, .f-label-static { color: var(--ink-400); }
+.f.grow { flex: 1; margin-bottom: 0; }
+.f-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+
+input[type="text"], input[type="email"], input[type="date"], input[type="number"], textarea, select {
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 8px 9px;
+  font-size: 13.5px;
+  background: var(--surface);
+  width: 100%;
+  outline: none;
+  transition: border-color .13s, box-shadow .13s;
+}
+input:hover, textarea:hover, select:hover { border-color: var(--ink-200); }
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 13%, transparent);
+  outline: none;
+}
+textarea { resize: vertical; line-height: 1.5; }
+select { cursor: pointer; }
+
+.hint { margin: 6px 0 0; font-size: 11.5px; color: var(--ink-400); line-height: 1.45; }
+
+.cf { display: flex; align-items: flex-end; gap: 10px; margin-bottom: 10px; }
+.cf:last-of-type { margin-bottom: 0; }
+.f-label-static { padding-bottom: 8px; flex: 1; }
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--ink-400);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  padding-bottom: 8px;
+}
+.card-head .switch, .f-head .switch { padding-bottom: 0; }
+.switch input { accent-color: var(--accent); cursor: pointer; margin: 0; }
+
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; }
+.seg-btn {
+  border: none;
+  background: var(--surface);
+  color: var(--ink-400);
+  padding: 4px 9px;
+  cursor: pointer;
+}
+.seg-btn.active { background: var(--accent); color: #fff; }
+
+.mono-val { color: var(--ink-500); }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 20px;
+  background: none;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track { height: 3px; background: var(--line); border-radius: 2px; }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  margin-top: -5.5px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px var(--line);
+}
+input[type="range"]::-moz-range-track { height: 3px; background: var(--line); border-radius: 2px; }
+input[type="range"]::-moz-range-thumb {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--accent); border: 2px solid #fff;
+}
+
+.color-row { display: flex; align-items: center; gap: 11px; }
+input[type="color"] {
+  width: 40px; height: 34px;
+  padding: 0; border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: none; cursor: pointer;
+  flex-shrink: 0;
+}
+.swatches { display: flex; gap: 6px; flex-wrap: wrap; }
+.swatch {
+  width: 21px; height: 21px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px var(--line);
+  transition: transform .12s;
+}
+.swatch:hover { transform: scale(1.14); }
+.swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink-900); }
+
+/* photo drop */
+.photo-drop {
+  position: relative;
+  border: 1px dashed var(--ink-200);
+  border-radius: var(--r-md);
+  background: var(--well);
+  min-height: 84px;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px;
+  margin-bottom: 9px;
+  transition: border-color .13s, background .13s;
+}
+.photo-drop.over { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, #fff); }
+.photo-drop input[type="file"] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+#photoThumb { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.photo-drop-text { display: flex; flex-direction: column; gap: 2px; }
+.photo-drop-text strong { font-size: 13px; font-weight: 600; }
+.photo-drop-text span { font-size: 11.5px; color: var(--ink-400); }
+
+/* dynamic rows + blocks */
+.rows { display: flex; flex-direction: column; gap: 7px; }
+.row { display: flex; align-items: flex-end; gap: 7px; }
+.row .blk-f { flex: 1; }
+.row .blk-f.lvl { flex: 0 0 128px; }
+
+.blocks { display: flex; flex-direction: column; gap: 10px; }
+.blk {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--well);
+  padding: 11px;
+  position: relative;
+}
+.blk-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 9px;
+}
+.blk-n {
+  font-family: var(--mono);
+  font-size: 10px; font-weight: 600;
+  color: var(--ink-400);
+  letter-spacing: .08em;
+}
+.blk-tools { display: flex; gap: 3px; }
+.blk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.blk-f { display: flex; flex-direction: column; gap: 4px; }
+.blk-f label { color: var(--ink-400); }
+.blk-f.full { grid-column: 1 / -1; }
+.blk-f input, .blk-f select, .blk-f textarea { background: var(--surface); }
+
+.ico {
+  width: 26px; height: 26px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-400);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; line-height: 1;
+  padding: 0;
+  transition: background .12s, color .12s, border-color .12s;
+}
+.ico:hover:not(:disabled) { background: var(--ink-900); color: #fff; border-color: var(--ink-900); }
+.ico:disabled { opacity: .3; cursor: not-allowed; }
+.ico.danger:hover { background: #c0453f; border-color: #c0453f; color: #fff; }
+
+/* =========================================================
+   CANVAS  (dark desk — the paper is the only bright object)
+   ========================================================= */
+.canvas {
+  background: var(--ink-800);
+  overflow: auto;
+  padding: 28px 26px 60px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+}
+.stack-fit { flex-shrink: 0; }
+.stack {
+  width: 794px;
+  transform-origin: top left;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* the measuring rig: laid out for real, never painted */
+.measure-rig {
+  position: absolute;
+  top: 0; left: -20000px;
+  width: 794px;
+  visibility: hidden;
+  pointer-events: none;
+}
+.measure-rig .cv-body { height: auto; }
+.measure-rig .cv-sidebar, .measure-rig .cv-main { height: auto; }
+
+/* =========================================================
+   THE SHEET — true A4 at 96dpi (794 × 1123)
+   ========================================================= */
+.sheet {
+  width: 794px;
+  height: 1123px;
+  background: #fff;
+  box-shadow: var(--shadow-sheet);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex-shrink: 0;
+  /* the export is window.print(); without this the accent block,
+     the rules and the icons come out of the PDF white */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* The rig must resolve every paper metric exactly as a real sheet
+   does, or the measured heights would not match what gets painted. */
+.sheet, .measure-rig {
+  font-family: var(--cv-font, "Carlito"), "Calibri", sans-serif;
+
+  /* Three inks, and only three. The paper had drifted onto four
+     hard-coded greys that belonged to no scale. */
+  --paper-ink: #1f2933;    /* name, job titles */
+  --paper-text: #414d5a;   /* running text */
+  --paper-mute: #7b8794;   /* dates, secondary meta */
+
+  /* One tint ramp, mixed from whatever accent the user picked, so
+     the soft colour follows the hue instead of being a second
+     palette that only agrees with navy. */
+  --tint-1: color-mix(in srgb, var(--accent) 5%, #fff);    /* column wash, cards */
+  --tint-2: color-mix(in srgb, var(--accent) 11%, #fff);   /* fills */
+  --tint-3: color-mix(in srgb, var(--accent) 20%, #fff);   /* tag borders, rules */
+  --r-card: 10px;
+  --r-tag: 7px;
+
+  /* Type scale lifted from the source template (Calibri at
+     ~10–29pt), so a normal CV fills the sheet the way it does
+     there instead of floating in the top two thirds. */
+  --fs-body: calc(13px * var(--ts, 1));
+  --fs-role: calc(15.5px * var(--ts, 1));
+  --fs-h3: calc(14px * var(--ts, 1));
+  --fs-name: calc(43px * var(--ts, 1));
+  --fs-tagline: calc(16.5px * var(--ts, 1));
+  --fs-micro: calc(11px * var(--ts, 1));
+
+  --sp-entry: calc(16px * var(--dn, 1));
+  --sp-section: calc(30px * var(--dn, 1));
+  --sp-head: calc(13px * var(--dn, 1));
+  --sp-item: calc(8px * var(--dn, 1));
+
+  /* one vertical rhythm, instead of six ad-hoc line-heights */
+  --lh-body: 1.45;
+  --lh-head: 1.2;
+
+  /* the two vertical lines every element on the page snaps to:
+     the column edge itself, and the main column's text edge */
+  --side-pad: 24px;
+  --main-pad: 32px;
+}
+
+/* ---- header band (page 1 only) ----
+   The header is the grid's first row rather than a set of shapes
+   fighting it: the accent block stops exactly where the sidebar
+   stops, and the name starts on the main column's text edge. Two
+   lines then run uninterrupted from the top of the page to the
+   bottom — which is what reads as "designed". */
+/* 200px, not 245: at 245 the band held a 36px name in a space deep
+   enough for three of them, and gave the page away for nothing.
+   Keep in step with HEADER_H in app.js — the packer measures
+   page one against it. */
+.cv-header {
+  height: 200px;
+  flex-shrink: 0;
+  position: relative;
+  background: #fff;
+  overflow: hidden;
+}
+.cv-header::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: var(--side-w, 34%);
+  background: var(--accent);
+}
+.cv-photo, .cv-monogram {
+  position: absolute;
+  top: 27px;
+  left: calc(var(--side-w, 34%) / 2 - 73px);
+  width: 146px; height: 146px;
+  border-radius: 50%;
+  z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+}
+.cv-photo {
+  overflow: hidden;
+  background: #dde4ec;
+  /* white against the eight swatches, dark against a pale pick */
+  border: 3px solid color-mix(in srgb, var(--on-accent, #fff) 92%, transparent);
+}
+.cv-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cv-photo .ph {
+  width: 42px; height: 42px;
+  color: #a9b5c2;
+}
+.cv-monogram {
+  border: 2px solid color-mix(in srgb, var(--on-accent, #fff) 38%, transparent);
+  color: var(--on-accent, #fff);
+  font-size: calc(46px * var(--ts, 1));
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+.cv-head-text {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: calc(var(--side-w, 34%) + var(--main-pad));
+  right: var(--main-pad);
+  display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: center;
+  text-align: left;
+  z-index: 2;
+}
+.cv-name {
+  margin: 0 0 9px;
+  font-size: var(--fs-name);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--paper-ink);
+  letter-spacing: -.01em;
+}
+.cv-tagline {
+  margin: 0;
+  font-size: var(--fs-tagline);
+  line-height: var(--lh-body);
+  color: var(--paper-text);
+  max-width: 38ch;
+}
+
+/* ---- body columns ---- */
+.cv-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--side-w, 34%) 1fr;
+  min-height: 0;
+}
+/* Flex columns, so block margins never collapse — the packer's
+   measurements and the painted result stay identical. */
+.cv-sidebar {
+  padding: 30px var(--side-pad);
+  /* The wash carries the accent block down the rest of the page:
+     same column, same edge, two steps of the same colour — which is
+     what makes the header read as part of the page and not a
+     letterhead sitting on top of it. */
+  background: var(--tint-1);
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.cv-main {
+  padding: 30px var(--main-pad);
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.cv-sidebar > *, .cv-main > * { flex-shrink: 0; }
+/* continuation pages breathe a little more at the top */
+.sheet.cont .cv-sidebar, .sheet.cont .cv-main { padding-top: 42px; }
+
+/* ---- blocks inside the paper ---- */
+.b { margin-bottom: var(--sp-item); }
+.b:last-child { margin-bottom: 0; }
+
+/* .b-h3 owns the look, .b.is-h owns every margin — keeping them
+   apart avoids the two rules cancelling each other out. */
+.b-h3 {
+  margin: 0;
+  position: relative;
+  padding-bottom: 2px;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: var(--lh-head);
+  text-transform: uppercase;
+  letter-spacing: .045em;
+  color: var(--accent-ink, var(--accent));
+}
+/* Two-tone rule: a solid accent segment that reads as a marker,
+   running out into a tinted hairline. One line doing the work the
+   old full-width 2px bar did with four times the weight. */
+.cv-main .b-h3 { padding-bottom: 9px; }
+.cv-main .b-h3::before {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 2px; border-radius: 2px;
+  background: linear-gradient(to right,
+    var(--accent) 0 46px, var(--tint-3) 46px 100%);
+}
+/* The sidebar sits on the wash and needs no rule at all: caps,
+   letterspacing and the colour already read as a heading. */
+.cv-sidebar .b-h3 { padding-bottom: 2px; }
+.b-h3.cont::after {
+  content: " (suite)";
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: .55;
+}
+/* a heading always opens a new section: air above it, and a clear
+   step down to the content it introduces. --sp-flow is the slack a
+   short CV hands back to the gaps (computed in doPaint). */
+.b.is-h { margin-top: calc(var(--sp-section) + var(--sp-flow, 0px)); margin-bottom: var(--sp-head); }
+.b.is-h:first-child, .sheet.cont .b.is-h:first-child { margin-top: 0; }
+
+.b-contact {
+  display: flex; align-items: center; gap: 9px;
+  margin-bottom: calc(var(--sp-item) * .75);
+  font-size: var(--fs-body);
+  color: var(--paper-text);
+  line-height: var(--lh-body);
+}
+/* the icon gets its own white chip — it lifts off the wash instead
+   of floating loose in it, and matches the tag shape below */
+.b-contact svg {
+  width: 22px; height: 22px;
+  padding: 4px;
+  flex-shrink: 0;
+  border-radius: var(--r-tag);
+  background: #fff;
+  border: 1px solid var(--tint-3);
+  color: var(--accent-ink, var(--accent));
+}
+.b-contact span { word-break: break-word; }
+
+/* A 5-step bar says nothing a recruiter can act on and nothing an
+   ATS can read; the level the user already picked says both. */
+.b-lang {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 10px;
+  margin-bottom: var(--sp-item);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.b-lang .n { color: var(--paper-text); }
+.b-lang .lv {
+  flex-shrink: 0;
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  color: var(--accent-ink, var(--accent));
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* Skills and interests as tags. Each stays its own atomic block —
+   the packer measures them one by one — so align-self keeps the tag
+   hugging its text instead of stretching to the column. 7px rather
+   than a full pill: a long skill wraps to two lines and a 999px
+   radius would look broken there. */
+.b-dot {
+  align-self: flex-start;
+  max-width: 100%;
+  font-size: var(--fs-body);
+  color: var(--paper-text);
+  line-height: var(--lh-body);
+  padding: 3px 10px;
+  border-radius: var(--r-tag);
+  background: #fff;
+  border: 1px solid var(--tint-3);
+  margin-bottom: calc(var(--sp-item) * .62);
+}
+/* the main column has no wash to lift off, so the tag is tinted */
+.cv-main .b-dot { background: var(--tint-1); }
+
+/* A rule groups the entry; the accent dot it replaces speckled the
+   page and grouped nothing. */
+.b-entry {
+  position: relative;
+  padding-left: 14px;
+  margin-bottom: var(--sp-entry);
+  border-left: 2px solid var(--tint-3);
+}
+.b-entry .role {
+  margin: 0 0 3px;
+  font-size: var(--fs-role);
+  font-weight: 700;
+  color: var(--paper-ink);
+  line-height: var(--lh-head);
+}
+.b-entry .meta {
+  margin: 0;
+  font-size: var(--fs-body);
+  color: var(--paper-mute);
+  line-height: var(--lh-body);
+}
+.b-entry .meta b { color: var(--paper-text); font-style: italic; }
+.b-entry .desc {
+  margin: 5px 0 0;
+  padding-left: 12px;
+  font-size: var(--fs-body);
+  color: var(--paper-text);
+  line-height: var(--lh-body);
+  list-style: none;
+}
+.b-entry .desc li { position: relative; margin-bottom: 2px; }
+.b-entry .desc li::before {
+  content: "–";
+  position: absolute; left: -12px;
+  color: var(--paper-mute);
+}
+
+/* The profile becomes a soft card: it rhymes with the sidebar wash
+   across the gutter, and gives the top of the main column something
+   with weight — which is exactly where a short CV looks thinnest. */
+.b-profile {
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: var(--r-card);
+  background: var(--tint-1);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--paper-text);
+  /* justified text in a narrow column with no hyphenation = rivers */
+  text-align: left;
+}
+
+.cv-blank {
+  font-size: var(--fs-body);
+  color: var(--paper-mute);
+  font-style: italic;
+}
+
+/* =========================================================
+   PAGE RAIL — the signature: live A4 fill gauges
+   ========================================================= */
+.pages {
+  background: var(--ink-900);
+  border-left: 1px solid rgba(255,255,255,.07);
+  padding: 16px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  overflow-y: auto;
+}
+.pages-label {
+  margin: 0 0 2px;
+  font-family: var(--mono);
+  font-size: 9.5px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(255,255,255,.38);
+  text-align: center;
+}
+.page-chips { display: flex; flex-direction: column; gap: 8px; }
+
+.chip {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 210 / 297;
+  border-radius: 3px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.07);
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0;
+  transition: border-color .14s, transform .14s;
+}
+.chip:hover { transform: translateY(-1px); border-color: rgba(255,255,255,.4); }
+.chip[aria-current="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent); }
+.chip .fill {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  background: color-mix(in srgb, var(--accent) 72%, #fff);
+  transition: height .2s ease;
+}
+.chip .num {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 13px; font-weight: 600;
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
+.pages-foot {
+  margin-top: auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 4px;
+  padding-top: 10px;
+}
+.zoom-btn {
+  width: 22px; height: 22px;
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(255,255,255,.18);
+  background: transparent;
+  color: rgba(255,255,255,.75);
+  cursor: pointer;
+  font-size: 14px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0;
+}
+.zoom-btn:hover { background: rgba(255,255,255,.12); color: #fff; }
+.zoom-val {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: rgba(255,255,255,.55);
+  letter-spacing: .04em;
+}
+.fit-btn {
+  width: 100%;
+  height: 26px;
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(255,255,255,.18);
+  background: transparent;
+  color: rgba(255,255,255,.75);
+  font-family: var(--mono);
+  font-size: 9.5px; font-weight: 600;
+  letter-spacing: .09em; text-transform: uppercase;
+  cursor: pointer;
+}
+.fit-btn:hover { background: rgba(255,255,255,.12); color: #fff; }
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+.toast {
+  position: fixed;
+  bottom: 22px; left: 50%;
+  transform: translate(-50%, 14px);
+  background: var(--ink-900);
+  color: #fff;
+  padding: 10px 17px;
+  border-radius: var(--r-md);
+  font-size: 13px; font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 100;
+  transition: opacity .18s, transform .18s;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1180px) {
+  :root { --rail-w: 340px; --pages-w: 74px; }
+}
+@media (max-width: 940px) {
+  .app { grid-template-columns: 1fr; height: auto; }
+  .rail { border-right: none; border-bottom: 1px solid var(--line); max-height: 62vh; }
+  .canvas { padding: 20px 14px 40px; }
+  .pages { display: none; }
+  .topbar { flex-wrap: wrap; height: auto; padding: 10px 14px; gap: 10px 14px; }
+  .doc-state { order: 3; flex-basis: 100%; }
+  .topbar-actions { flex-wrap: wrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* =========================================================
+   PRINT — the sheets become real A4 pages, one per page
+   ========================================================= */
+@media print {
+  .topbar, .rail, .pages, .toast, .measure-rig { display: none !important; }
+  html, body { background: #fff; height: auto; }
+  .app { display: block; height: auto; }
+  .canvas { padding: 0; background: #fff; overflow: visible; display: block; }
+  .stack-fit { width: auto !important; height: auto !important; }
+  .stack {
+    width: auto !important;
+    transform: none !important;
+    gap: 0 !important;
+    display: block;
+  }
+  .sheet {
+    width: 210mm;
+    height: 297mm;
+    box-shadow: none;
+    break-after: page;
+    page-break-after: always;
+  }
+  .sheet:last-child { break-after: auto; page-break-after: auto; }
+  @page { size: A4; margin: 0; }
+}

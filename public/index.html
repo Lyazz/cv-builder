@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CV Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@400;700&family=Source+Sans+3:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span class="brand-name">CV&nbsp;Builder</span>
+  </div>
+
+  <div class="doc-state">
+    <select id="loadSelect" class="doc-select" aria-label="Ouvrir un CV enregistré">
+      <option value="">Nouveau CV</option>
+    </select>
+    <span class="save-dot" id="saveDot" data-state="clean"></span>
+    <span class="save-text" id="saveText">Enregistré</span>
+  </div>
+
+  <div class="topbar-actions">
+    <button id="newBtn" class="btn btn-quiet">Nouveau</button>
+    <button id="deleteBtn" class="btn btn-quiet btn-danger" disabled>Supprimer</button>
+    <span class="rule" aria-hidden="true"></span>
+    <button id="importJsonBtn" class="btn btn-quiet">Importer</button>
+    <input type="file" id="importJsonInput" accept="application/json" hidden />
+    <button id="exportJsonBtn" class="btn btn-quiet">Exporter JSON</button>
+    <span class="rule" aria-hidden="true"></span>
+    <button id="saveBtn" class="btn btn-solid">Enregistrer</button>
+    <button id="exportBtn" class="btn btn-accent">Télécharger le PDF</button>
+  </div>
+</header>
+
+<main class="app">
+
+  <!-- ============ TOOL RAIL ============ -->
+  <section class="rail" id="rail">
+    <div class="tabs" role="tablist">
+      <button class="tab active" role="tab" data-tab="content" aria-selected="true">Contenu</button>
+      <button class="tab" role="tab" data-tab="style" aria-selected="false">Mise en forme</button>
+    </div>
+
+    <div class="rail-scroll" id="railScroll">
+
+      <!-- ---------- CONTENT TAB ---------- -->
+      <div class="tab-panel active" data-panel="content">
+
+        <section class="card">
+          <h2 class="card-title">Identité</h2>
+          <div class="f">
+            <label for="fullName">Nom complet</label>
+            <input type="text" id="fullName" placeholder="Amira Bahri" />
+          </div>
+          <div class="f">
+            <label for="jobTitle">Titre professionnel</label>
+            <textarea id="jobTitle" rows="2" placeholder="Étudiante en Master Management"></textarea>
+          </div>
+          <div class="f">
+            <div class="f-head">
+              <label for="profile">Profil</label>
+              <label class="switch"><input type="checkbox" id="showProfile" /><span>Afficher</span></label>
+            </div>
+            <textarea id="profile" rows="4" placeholder="Deux ou trois phrases sur votre parcours et ce que vous recherchez."></textarea>
+            <p class="hint" id="profileCount">0 caractère</p>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="card-title">Coordonnées</h2>
+
+          <div class="cf">
+            <div class="f grow"><label for="phone">Téléphone</label><input type="text" id="phone" placeholder="05 41 94 40 76" /></div>
+            <label class="switch"><input type="checkbox" id="showPhone" checked /><span>Afficher</span></label>
+          </div>
+          <div class="cf">
+            <div class="f grow"><label for="email">Email</label><input type="email" id="email" placeholder="nom@email.com" /></div>
+            <label class="switch"><input type="checkbox" id="showEmail" checked /><span>Afficher</span></label>
+          </div>
+          <div class="cf">
+            <div class="f grow"><label for="location">Ville</label><input type="text" id="location" placeholder="Béjaia, Algérie" /></div>
+            <label class="switch"><input type="checkbox" id="showLocation" checked /><span>Afficher</span></label>
+          </div>
+          <div class="cf">
+            <div class="f grow"><label for="linkedin">LinkedIn / site</label><input type="text" id="linkedin" placeholder="linkedin.com/in/…" /></div>
+            <label class="switch"><input type="checkbox" id="showLinkedin" /><span>Afficher</span></label>
+          </div>
+          <div class="cf">
+            <div class="f grow"><label for="licence">Permis de conduire</label><input type="text" id="licence" placeholder="Permis B" /></div>
+            <label class="switch"><input type="checkbox" id="showLicence" /><span>Afficher</span></label>
+          </div>
+
+          <div class="cf">
+            <div class="f grow">
+              <div class="f-head">
+                <label for="birthdate">Naissance</label>
+                <div class="seg" role="group" aria-label="Date ou âge">
+                  <button type="button" class="seg-btn active" id="modeDateBtn">Date</button>
+                  <button type="button" class="seg-btn" id="modeAgeBtn">Âge</button>
+                </div>
+              </div>
+              <input type="date" id="birthdate" />
+              <input type="number" id="age" placeholder="23" min="14" max="99" hidden />
+            </div>
+            <label class="switch"><input type="checkbox" id="showBirthdate" /><span>Afficher</span></label>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <h2 class="card-title">Expériences</h2>
+            <label class="switch"><input type="checkbox" id="showExperiences" checked /><span>Afficher</span></label>
+          </div>
+          <div class="f">
+            <label for="titleExperiences">Intitulé de la rubrique</label>
+            <input type="text" id="titleExperiences" placeholder="Expériences professionnelles" />
+          </div>
+          <div id="experiencesList" class="blocks"></div>
+          <button class="btn btn-add" id="addExperience">Ajouter une expérience</button>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <h2 class="card-title">Formations</h2>
+            <label class="switch"><input type="checkbox" id="showEducations" checked /><span>Afficher</span></label>
+          </div>
+          <div class="f">
+            <label for="titleEducations">Intitulé de la rubrique</label>
+            <input type="text" id="titleEducations" placeholder="Diplômes / Formations" />
+          </div>
+          <div id="educationsList" class="blocks"></div>
+          <button class="btn btn-add" id="addEducation">Ajouter une formation</button>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <h2 class="card-title">Compétences</h2>
+            <label class="switch"><input type="checkbox" id="showSkills" checked /><span>Afficher</span></label>
+          </div>
+          <div class="f">
+            <label for="titleSkills">Intitulé de la rubrique</label>
+            <input type="text" id="titleSkills" placeholder="Compétences" />
+          </div>
+          <div id="skillsList" class="rows"></div>
+          <button class="btn btn-add" id="addSkill">Ajouter une compétence</button>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <h2 class="card-title">Langues</h2>
+            <label class="switch"><input type="checkbox" id="showLanguages" checked /><span>Afficher</span></label>
+          </div>
+          <div class="f">
+            <label for="titleLanguages">Intitulé de la rubrique</label>
+            <input type="text" id="titleLanguages" placeholder="Langues" />
+          </div>
+          <div id="languagesList" class="rows"></div>
+          <button class="btn btn-add" id="addLanguage">Ajouter une langue</button>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <h2 class="card-title">Centres d'intérêt</h2>
+            <label class="switch"><input type="checkbox" id="showInterests" checked /><span>Afficher</span></label>
+          </div>
+          <div class="f">
+            <label for="titleInterests">Intitulé de la rubrique</label>
+            <input type="text" id="titleInterests" placeholder="Centres d'intérêt" />
+          </div>
+          <div id="interestsList" class="rows"></div>
+          <button class="btn btn-add" id="addInterest">Ajouter un centre d'intérêt</button>
+        </section>
+      </div>
+
+      <!-- ---------- STYLE TAB ---------- -->
+      <div class="tab-panel" data-panel="style">
+
+        <section class="card">
+          <h2 class="card-title">Couleur d'accent</h2>
+          <div class="color-row">
+            <input type="color" id="accentColor" value="#1c3d5e" aria-label="Couleur personnalisée" />
+            <div class="swatches" id="swatches"></div>
+          </div>
+          <p class="hint">Elle habille le bandeau, les titres et les jauges de langue.</p>
+        </section>
+
+        <section class="card">
+          <h2 class="card-title">Typographie</h2>
+          <div class="f">
+            <label for="fontFamily">Police du CV</label>
+            <select id="fontFamily">
+              <option value="Carlito">Carlito — équivalent Calibri</option>
+              <option value="Lato">Lato — humaniste</option>
+              <option value="Source Sans 3">Source Sans 3 — neutre</option>
+              <option value="Archivo">Archivo — grotesque</option>
+              <option value="EB Garamond">EB Garamond — sérif classique</option>
+            </select>
+          </div>
+          <div class="f">
+            <div class="f-head">
+              <label for="textScale">Taille du texte</label>
+              <output class="mono-val" id="textScaleOut">100 %</output>
+            </div>
+            <input type="range" id="textScale" min="85" max="120" step="1" value="100" />
+          </div>
+          <div class="f">
+            <div class="f-head">
+              <label for="density">Espacement</label>
+              <output class="mono-val" id="densityOut">Normal</output>
+            </div>
+            <input type="range" id="density" min="80" max="125" step="5" value="100" />
+          </div>
+          <p class="hint">Réduisez ces deux réglages pour faire tenir le CV sur une page.</p>
+        </section>
+
+        <section class="card">
+          <h2 class="card-title">Photo</h2>
+          <div class="cf">
+            <span class="f-label-static">Afficher la photo</span>
+            <label class="switch"><input type="checkbox" id="showPhoto" checked /><span>Afficher</span></label>
+          </div>
+          <div class="photo-drop" id="photoDrop">
+            <img id="photoThumb" alt="" hidden />
+            <div class="photo-drop-text" id="photoDropText">
+              <strong>Choisir une photo</strong>
+              <span>ou glissez un fichier ici</span>
+            </div>
+            <input type="file" id="photoInput" accept="image/*" />
+          </div>
+          <button class="btn btn-quiet btn-wide" id="removePhotoBtn">Retirer la photo</button>
+          <div class="f">
+            <div class="f-head">
+              <label for="photoZoom">Recadrage</label>
+              <output class="mono-val" id="photoZoomOut">100 %</output>
+            </div>
+            <input type="range" id="photoZoom" min="100" max="220" step="5" value="100" />
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="card-title">Mise en page</h2>
+          <div class="f">
+            <label for="sidebarWidth">Largeur de la colonne latérale</label>
+            <input type="range" id="sidebarWidth" min="28" max="40" step="1" value="34" />
+          </div>
+          <p class="hint" id="sidebarWidthOut">34 % de la largeur de la page</p>
+        </section>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ CANVAS ============ -->
+  <section class="canvas" id="canvas">
+    <div class="stack-fit" id="stackFit">
+      <div class="stack" id="stack"></div>
+    </div>
+
+    <!-- measuring rig: same metrics as a real column, never painted -->
+    <div class="measure-rig" aria-hidden="true">
+      <div class="cv-body">
+        <aside class="cv-sidebar" id="measureSidebar"></aside>
+        <div class="cv-main" id="measureMain"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE RAIL (signature) ============ -->
+  <aside class="pages" id="pages">
+    <p class="pages-label">Pages</p>
+    <div class="page-chips" id="pageChips"></div>
+    <div class="pages-foot">
+      <button class="zoom-btn" id="zoomOut" aria-label="Réduire">–</button>
+      <output class="zoom-val" id="zoomVal">—</output>
+      <button class="zoom-btn" id="zoomIn" aria-label="Agrandir">+</button>
+    </div>
+    <button class="fit-btn" id="fitBtn">Ajuster</button>
+  </aside>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
