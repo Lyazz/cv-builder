@@ -1007,5 +1007,10 @@ input[type="color"] {
     page-break-after: always;
   }
   .sheet:last-child { break-after: auto; page-break-after: auto; }
+  /* margin: 0 also keeps Chrome/Edge from stamping their own
+     URL/date/page-number footer at the bottom of the PDF — with no
+     margin box to draw it in, the print dialog defaults "Margins" to
+     "None" and drops it. Firefox/Safari still need the user to turn
+     off "Headers and footers" by hand. */
   @page { size: A4; margin: 0; }
 }
