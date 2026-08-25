@@ -779,6 +779,40 @@
     touch(); redraw();
   }
 
+  // Rendered client-side with html2canvas + jsPDF instead of window.print():
+  // the browser's own print pipeline is what stamps a URL/date/page-number
+  // strip at the bottom of the page, and no page CSS can turn that off —
+  // it's the browser's call, not ours. Rasterizing each .sheet (already
+  // laid out at true A4 size, 794×1123px) into its own PDF page sidesteps
+  // the print dialog entirely, so there's nothing left to stamp a footer on.
+  let exporting = false;
+  async function exportPdf() {
+    if (exporting) return;
+    const sheets = Array.from(stack.querySelectorAll('.sheet'));
+    if (!sheets.length) return;
+    exporting = true;
+    const btn = $('exportBtn');
+    btn.disabled = true;
+    const prevTransform = stack.style.transform;
+    stack.style.transform = 'none';
+    try {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
+      for (let i = 0; i < sheets.length; i++) {
+        const canvas = await html2canvas(sheets[i], { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+        if (i > 0) pdf.addPage('a4', 'p');
+        pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
+      }
+      pdf.save(`${slug(cv.fullName)}.pdf`);
+    } catch (err) {
+      toast('Échec de la génération du PDF');
+    } finally {
+      stack.style.transform = prevTransform;
+      btn.disabled = false;
+      exporting = false;
+    }
+  }
+
   $('saveBtn').addEventListener('click', () => save(false));
   $('newBtn').addEventListener('click', () => {
     if (!confirm('Repartir d\'un CV vierge ? Le contenu actuel sera remplacé (et enregistré automatiquement).')) return;
@@ -790,21 +824,7 @@
     if (res.ok || res.status === 204) window.location.href = '/login.html';
     else toast('Suppression impossible');
   });
-  $('exportBtn').addEventListener('click', () => {
-    // The URL/date/page-number strip a browser adds at the bottom of a
-    // printed page is a print-dialog preference, not something a page can
-    // switch off — only "Marges: Aucune" (or unchecking "En-têtes et pieds
-    // de page") does that. @page{margin:0} above nudges Chrome into that
-    // state automatically; other browsers still need the manual toggle,
-    // so point new users at it once, before the native dialog takes over.
-    if (!localStorage.getItem('cvPrintHintSeen')) {
-      localStorage.setItem('cvPrintHintSeen', '1');
-      toast('Astuce : dans la fenêtre d\'impression, Marges → Aucune (retire l\'URL et la date en bas de page)', 4000);
-      setTimeout(() => window.print(), 1100);
-      return;
-    }
-    window.print();
-  });
+  $('exportBtn').addEventListener('click', exportPdf);
   $('logoutBtn').addEventListener('click', async () => {
     await fetch('/api/logout', { method: 'POST' });
     window.location.href = '/login.html';
@@ -841,7 +861,7 @@
 
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); save(false); }
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') { e.preventDefault(); window.print(); }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') { e.preventDefault(); exportPdf(); }
   });
   window.addEventListener('beforeunload', (e) => {
     if (dirty) { e.preventDefault(); e.returnValue = ''; }

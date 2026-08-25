@@ -31,7 +31,7 @@
     <button id="exportJsonBtn" class="btn btn-quiet">Exporter JSON</button>
     <span class="rule" aria-hidden="true"></span>
     <button id="saveBtn" class="btn btn-solid">Enregistrer</button>
-    <button id="exportBtn" class="btn btn-accent" title="Dans la fenêtre d'impression : réglez « Marges » sur « Aucune » (ou décochez « En-têtes et pieds de page ») pour un PDF sans URL ni date en bas de page.">Télécharger le PDF</button>
+    <button id="exportBtn" class="btn btn-accent">Télécharger le PDF</button>
     <span class="rule" aria-hidden="true"></span>
     <button id="logoutBtn" class="btn btn-quiet">Déconnexion</button>
   </div>
@@ -285,6 +285,8 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="vendor/html2canvas.min.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
