@@ -720,11 +720,11 @@
   }
 
   let toastT = null;
-  function toast(msg) {
+  function toast(msg, ms = 2300) {
     const t = $('toast');
     t.textContent = msg; t.classList.add('show');
     clearTimeout(toastT);
-    toastT = setTimeout(() => t.classList.remove('show'), 2300);
+    toastT = setTimeout(() => t.classList.remove('show'), ms);
   }
   function markClean() {
     dirty = false;
@@ -790,7 +790,21 @@
     if (res.ok || res.status === 204) window.location.href = '/login.html';
     else toast('Suppression impossible');
   });
-  $('exportBtn').addEventListener('click', () => window.print());
+  $('exportBtn').addEventListener('click', () => {
+    // The URL/date/page-number strip a browser adds at the bottom of a
+    // printed page is a print-dialog preference, not something a page can
+    // switch off — only "Marges: Aucune" (or unchecking "En-têtes et pieds
+    // de page") does that. @page{margin:0} above nudges Chrome into that
+    // state automatically; other browsers still need the manual toggle,
+    // so point new users at it once, before the native dialog takes over.
+    if (!localStorage.getItem('cvPrintHintSeen')) {
+      localStorage.setItem('cvPrintHintSeen', '1');
+      toast('Astuce : dans la fenêtre d\'impression, Marges → Aucune (retire l\'URL et la date en bas de page)', 4000);
+      setTimeout(() => window.print(), 1100);
+      return;
+    }
+    window.print();
+  });
   $('logoutBtn').addEventListener('click', async () => {
     await fetch('/api/logout', { method: 'POST' });
     window.location.href = '/login.html';
