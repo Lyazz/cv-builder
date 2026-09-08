@@ -1,0 +1,260 @@
+/* =========================================================================
+   Yazid AITALLALA — CV
+   A 1:1 HTML/CSS rebuild of the print original.
+
+   Coordinate system
+   -----------------
+   The source PDF is A4 (595.28 x 841.89 pt) plus a 3 mm bleed. Every number
+   below is expressed in POINTS inside the *trimmed* A4 page, so the layout
+   maps straight onto an A4 PDF with no scaling anywhere.
+
+   Text is placed by BASELINE (--bl), the way the original does it, rather
+   than by box top: --x/--bl/--s come verbatim from the PDF's text runs, and
+   `.t` converts a baseline into a CSS `top` using Jost's own metrics
+   (ascent 1.070, descent 0.375 em -> half-leading correction 0.3475).
+   ========================================================================= */
+
+@import url("./fonts/fonts.css");
+
+:root{
+  --page-w: 595.28;
+  --page-h: 841.89;
+
+  --purple:      #6152a3;   /* headings, dates, decorations */
+  --purple-alt:  #6153a3;   /* same ink, as the original alternates it */
+  --ink:         #6d6e71;   /* body copy */
+  --ink-soft:    #6d6f72;   /* entry titles, project copy */
+  --ink-summary: #6b6b6b;   /* profile paragraph */
+  --ink-black:   #231f20;   /* page number, page-1 QR modules */
+  --card:        #f5f6f7;
+  --card-alt:    #f5f6f8;   /* page 2 cards sit a hair cooler */
+  --track:       #d1d3d4;   /* language bar track */
+}
+
+*{ box-sizing: border-box; }
+
+html{ background:#4a4a52; }
+
+body{
+  margin:0;
+  font-family:"Jost", "Century Gothic", "Futura", system-ui, sans-serif;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:geometricPrecision;
+  font-variant-ligatures:none;   /* the original sets no fi/fl ligatures */
+}
+
+/* ------------------------------------------------------------------ page */
+
+.sheet{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:24px;
+  padding:24px 12px 64px;
+}
+
+.page{
+  position:relative;
+  width:calc(var(--page-w) * 1pt);
+  height:calc(var(--page-h) * 1pt);
+  background:#fff;
+  overflow:hidden;
+  flex:none;
+  box-shadow:0 10px 40px rgba(0,0,0,.35);
+}
+
+/* --------------------------------------------------------------- text run
+   --x  left edge, pt
+   --bl baseline of the FIRST line, pt
+   --s  font size, pt
+   --lh line height, pt (defaults to Jost's natural 1.445 em)
+   --w  wrapping width, pt (optional)
+   --fix baseline trim, pt — see the note above the type styles              */
+
+.t{
+  --lh: calc(var(--s) * 1.445);
+  position:absolute;
+  left:calc(var(--x) * 1pt);
+  top:calc((var(--bl) + var(--fix, 0) - 0.3475 * var(--s)) * 1pt - var(--lh) * 0.5pt);
+  width:calc(var(--w, 400) * 1pt);
+  margin:0;
+  font-size:calc(var(--s) * 1pt);
+  line-height:calc(var(--lh) * 1pt);
+  white-space:pre-wrap;   /* newlines in the markup = the original's breaks */
+}
+
+/* ------------------------------------------------------------ type styles
+   Weights and tracking are measured off the three Jost cuts embedded in the
+   source (Light 300 / Regular 400 / SemiBold 600): for every style the
+   letter-spacing here reproduces the original's run widths to well under a
+   tenth of a point.
+
+   --fix is a baseline trim. Blink rounds a font's ascent and descent to whole
+   CSS pixels before it works out half-leading, so the first baseline lands up
+   to ~1.3 pt above where the pure metric maths puts it. The amount depends
+   only on (font-size, line-height), so it is a constant per style — measured,
+   not guessed. Any style that overrides --lh must override --fix with it.   */
+
+.st-name    { font-weight:400; letter-spacing:.0250em; color:var(--purple);      --fix:.607;  }
+.st-role    { font-weight:400; letter-spacing:.14864em; color:var(--ink);         --fix:.848;  }
+.st-summary { font-weight:400; letter-spacing:.0021em; color:var(--ink-summary); --fix:.451;  }
+.st-section { font-weight:400; letter-spacing:.04993em; color:var(--purple);      --fix:.736;  }
+.st-entry   { font-weight:600; letter-spacing:.05954em; color:var(--ink-soft);    --fix:1.104; }
+.st-entry-t { font-weight:600; letter-spacing:.00690em; color:var(--ink-soft);    --fix:1.281; }
+.st-org     { font-weight:400; letter-spacing:-.00076em;color:var(--ink);         --fix:.747;  }
+.st-date    { font-weight:400; letter-spacing:.05795em; color:var(--purple);      --fix:.532;  }
+.st-bullets { font-weight:400; letter-spacing:-.01076em;color:var(--ink);         --fix:.803;  }
+.st-skill   { font-weight:400; letter-spacing:-.01184em;color:var(--ink);         --fix:.459;  }
+.st-contact { font-weight:400; letter-spacing:.01207em; color:var(--ink);         --fix:.223;  }
+.st-qrlabel { font-weight:400; letter-spacing:.05736em; color:var(--ink);         --fix:.117;  }
+.st-scan    { font-weight:300; letter-spacing:.00715em; color:var(--purple-alt);  --fix:.801;  }
+.st-foot    { font-weight:400; letter-spacing:-.00076em;color:var(--ink);         --fix:.749;  }
+.st-pageno  { font-weight:400; letter-spacing:0;       color:var(--ink-black);   --fix:.849;  }
+.st-meta    { font-weight:400; letter-spacing:.05774em; color:var(--purple-alt);  --fix:.533;  }
+.st-value   { font-weight:400; letter-spacing:.00255em; color:var(--ink-soft);    --fix:.638;  }
+.st-desc    { font-weight:400; letter-spacing:-.00733em;color:var(--ink-soft);    --fix:1.083; }
+.st-lang    { font-weight:400; letter-spacing:-.0007em;color:var(--ink);         --fix:.746;  }
+.st-langsub { font-weight:400; letter-spacing:0;       color:var(--ink);         --fix:.850;  }
+
+.ar{ font-family:"Noto Naskh Arabic", serif; color:var(--ink-black); --fix:.484; }
+
+/* ------------------------------------------------------------------ boxes */
+
+.card{
+  position:absolute;
+  left:calc(var(--x) * 1pt);
+  top:calc(var(--y) * 1pt);
+  width:calc(var(--w) * 1pt);
+  height:calc(var(--h) * 1pt);
+  background:var(--bg, var(--card));
+  border-radius:6pt;
+}
+
+.img{
+  position:absolute;
+  left:calc(var(--x) * 1pt);
+  top:calc(var(--y) * 1pt);
+  width:calc(var(--w) * 1pt);
+  height:calc(var(--h) * 1pt);
+  display:block;
+}
+
+/* -------------------------------------------------------- page decoration */
+
+/* 4 x 2 ring grid, top-right and bottom-left.
+   The rings are placed one by one rather than on a grid: the original's
+   column advance (11.96 pt) and row advance (10.92 pt) are not whole pixels,
+   and a grid track would round them apart. */
+.dots{ position:absolute; width:43.44pt; height:18.43pt; }
+.dots i{
+  position:absolute;
+  width:7.51pt; height:7.51pt;
+  border:1pt solid var(--purple);
+  border-radius:50%;
+}
+.dots i:nth-child(4n+1){ left:0; }
+.dots i:nth-child(4n+2){ left:11.96pt; }
+.dots i:nth-child(4n+3){ left:23.94pt; }
+.dots i:nth-child(4n+4){ left:35.88pt; }
+.dots i:nth-child(-n+4){ top:0; }
+.dots i:nth-child(n+5) { top:10.92pt; }
+
+.dots--tr{ left:541.33pt; top:8.09pt; }
+.dots--bl{ left:13.61pt;  top:808.81pt; }
+
+/* solid triangle filling the bottom-right corner */
+.corner{
+  position:absolute; right:0; bottom:0;
+  width:0; height:0;
+  border-left:65.41pt solid transparent;
+  border-bottom:65.41pt solid var(--purple);
+}
+
+/* purple arch behind the portrait: a rectangle closed by a half-circle */
+.arch{
+  position:absolute;
+  left:68.78pt; top:-1.72pt;
+  width:202.44pt; height:181.85pt;
+  background:var(--purple);
+  border-radius:0 0 101.22pt 101.22pt;
+}
+
+/* ------------------------------------------------------------ QR + panels */
+
+.qr-panel{
+  position:absolute;
+  left:61.50pt; top:411.90pt;
+  width:217.30pt; height:68.80pt;
+  background:#fff;
+  border:.5pt solid var(--purple-alt);
+  border-radius:6pt;
+}
+
+.qr{
+  position:absolute;
+  left:calc(var(--x) * 1pt);
+  top:calc(var(--y) * 1pt);
+  width:calc(var(--w) * 1pt);
+  height:calc(var(--w) * 1pt);
+}
+.qr svg{ display:block; width:100%; height:100%; shape-rendering:crispEdges; }
+
+/* ---------------------------------------------------------- language bars */
+
+.bar{
+  position:absolute;
+  left:381.40pt;
+  top:calc(var(--bl) * 1pt - 2pt);   /* 4pt stroke centred on the baseline */
+  width:150.60pt; height:4pt;
+  background:var(--track);
+}
+.bar b{
+  display:block; height:100%;
+  width:calc(var(--fill) * 1pt);
+  background:var(--purple);
+}
+
+/* --------------------------------------------------------------- toolbar */
+
+.toolbar{
+  position:sticky; top:0; z-index:20;
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+  padding:10px 16px;
+  background:#22222a;
+  color:#e8e8ef;
+  font:500 13px/1.3 system-ui, sans-serif;
+  box-shadow:0 1px 0 rgba(255,255,255,.08);
+}
+.toolbar .grow{ flex:1 1 auto; }
+.toolbar button{
+  font:inherit; color:inherit;
+  padding:7px 13px; border-radius:7px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.06);
+  cursor:pointer;
+}
+.toolbar button:hover{ background:rgba(255,255,255,.13); }
+.toolbar button[aria-pressed="true"]{
+  background:var(--purple); border-color:var(--purple); color:#fff;
+}
+.toolbar .primary{ background:var(--purple); border-color:var(--purple); color:#fff; }
+.toolbar .primary:hover{ background:#6f5fb5; }
+.toolbar .note{ opacity:.62; font-weight:400; }
+
+/* editing affordance — never part of the printed page */
+.editing [contenteditable]{ outline:.75pt dashed rgba(97,82,163,.55); }
+[contenteditable]:focus{ outline:1pt solid var(--purple); }
+
+/* ----------------------------------------------------------------- print */
+
+@page{ size:A4; margin:0; }
+
+@media print{
+  html{ background:#fff; }
+  .toolbar{ display:none !important; }
+  .sheet{ display:block; padding:0; gap:0; }
+  .page{ box-shadow:none; break-after:page; page-break-after:always; }
+  .page:last-child{ break-after:auto; page-break-after:auto; }
+  .editing [contenteditable]{ outline:none; }
+}
