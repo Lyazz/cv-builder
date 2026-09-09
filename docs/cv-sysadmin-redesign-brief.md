@@ -56,7 +56,7 @@ Replace the paragraph. Fits the existing 6-line box at 7 pt / 11 pt leading:
 
 **Delete the Flutter / Java / JS logo strip.** Five groups need the space, and those marks argue for a developer on a CV that has to argue for infrastructure work.
 
-Set the gap between groups to **15 pt** (from 18 pt) so all five fit the existing card. Group titles and list lines keep their current styles.
+Set the gap between groups to **15 pt** (from 18 pt) so all six fit the existing card; Programming runs to two lines. Group titles and list lines keep their current styles.
 
 **Systems & Virtualization**
 Linux server administration (Ubuntu/Debian) - Windows Server & Active Directory - Docker (production) - Kubernetes (fundamentals) - VMware / VirtualBox
@@ -68,7 +68,7 @@ TCP/IP - Routing & switching - Firewall configuration - WAF / ADC concepts - Cis
 RAID configurations - Backup & recovery strategies - AES-256-GCM - Argon2id - Envelope encryption - HMAC-based indexing
 
 **Cloud, Databases & Programming**
-AWS (S3) - Git - CI/CD - PostgreSQL - MySQL - Supabase - Dart / Flutter - Java - PHP - JavaScript - Python - C++
+AWS (S3) - Git - CI/CD - PostgreSQL - MySQL - Supabase - Dart / Flutter - Java - PHP - JavaScript - Python - C++ - Vue.js - Nuxt.js
 
 **Other**
 IoT / Arduino - PCB design - 3D design (AutoCAD, Tinkercad)
