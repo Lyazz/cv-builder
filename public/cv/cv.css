@@ -26,10 +26,9 @@
   --ink-soft:    #6d6f72;   /* entry titles, project copy */
   --ink-summary: #6b6b6b;   /* profile paragraph */
   --ink-black:   #231f20;   /* page number, page-1 QR modules */
-  --card:        #f6f7f9;   /* one tint: the two originals differed by a value nobody can see */
-  --card-alt:    #f6f7f9;
+  --card:        #f5f6f7;
+  --card-alt:    #f5f6f8;   /* page 2 cards sit a hair cooler */
   --track:       #d1d3d4;   /* language bar track */
-  --rule:        #dcd9e8;   /* hairline under a section heading */
 }
 
 *{ box-sizing: border-box; }
@@ -86,13 +85,10 @@ body{
 }
 
 /* ------------------------------------------------------------ type styles
-   Weights come from the three Jost cuts embedded in the source (Light 300 /
-   Regular 400 / SemiBold 600).
-
-   Tracking is reserved for all-caps runs, where it earns its keep. The source
-   spread lowercase headings and titles to +50..+60/1000 em, which reads as
-   decoration rather than hierarchy; those are set solid now and the hierarchy
-   is carried by size, weight and colour instead.
+   Weights and tracking are measured off the three Jost cuts embedded in the
+   source (Light 300 / Regular 400 / SemiBold 600): for every style the
+   letter-spacing here reproduces the original's run widths to well under a
+   tenth of a point.
 
    --fix is a baseline trim. Blink rounds a font's ascent and descent to whole
    CSS pixels before it works out half-leading, so the first baseline lands up
@@ -100,39 +96,26 @@ body{
    only on (font-size, line-height), so it is a constant per style — measured,
    not guessed. Any style that overrides --lh must override --fix with it.   */
 
-.st-name    { font-weight:400; letter-spacing:0; color:var(--purple);      --fix:.607;  }
-.st-role    { font-weight:400; letter-spacing:.08em; color:var(--ink);         --fix:.848;  }
+.st-name    { font-weight:400; letter-spacing:.0250em; color:var(--purple);      --fix:.607;  }
+.st-role    { font-weight:400; letter-spacing:.14864em; color:var(--ink);         --fix:.848;  }
 .st-summary { font-weight:400; letter-spacing:.0021em; color:var(--ink-summary); --fix:.451;  }
 .st-section { font-weight:400; letter-spacing:.04993em; color:var(--purple);      --fix:.736;  }
-.st-entry   { font-weight:600; letter-spacing:0; color:var(--ink-soft);    --fix:1.104; }
+.st-entry   { font-weight:600; letter-spacing:.05954em; color:var(--ink-soft);    --fix:1.104; }
 .st-entry-t { font-weight:600; letter-spacing:.00690em; color:var(--ink-soft);    --fix:1.281; }
 .st-org     { font-weight:400; letter-spacing:-.00076em;color:var(--ink);         --fix:.747;  }
-.st-date    { font-weight:400; letter-spacing:.02em; color:var(--purple);      --fix:.532;  }
+.st-date    { font-weight:400; letter-spacing:.05795em; color:var(--purple);      --fix:.532;  }
 .st-bullets { font-weight:400; letter-spacing:-.01076em;color:var(--ink);         --fix:.803;  }
 .st-skill   { font-weight:400; letter-spacing:-.01184em;color:var(--ink);         --fix:.459;  }
 .st-contact { font-weight:400; letter-spacing:.01207em; color:var(--ink);         --fix:.223;  }
-.st-qrlabel { font-weight:400; letter-spacing:.02em; color:var(--ink);         --fix:.117;  }
+.st-qrlabel { font-weight:400; letter-spacing:.05736em; color:var(--ink);         --fix:.117;  }
 .st-scan    { font-weight:300; letter-spacing:.00715em; color:var(--purple-alt);  --fix:.801;  }
 .st-foot    { font-weight:400; letter-spacing:-.00076em;color:var(--ink);         --fix:.749;  }
 .st-pageno  { font-weight:400; letter-spacing:0;       color:var(--ink-black);   --fix:.849;  }
-.st-meta    { font-weight:400; letter-spacing:.02em; color:var(--purple-alt);  --fix:.533;  }
+.st-meta    { font-weight:400; letter-spacing:.05774em; color:var(--purple-alt);  --fix:.533;  }
 .st-value   { font-weight:400; letter-spacing:.00255em; color:var(--ink-soft);    --fix:.638;  }
 .st-desc    { font-weight:400; letter-spacing:-.00733em;color:var(--ink-soft);    --fix:1.083; }
 .st-lang    { font-weight:400; letter-spacing:-.0007em;color:var(--ink);         --fix:.746;  }
-.st-langsub { font-weight:400; letter-spacing:.06em;       color:var(--ink);         --fix:.850;  }
-
-ul.st-bullets{ list-style:none; padding:0; white-space:normal; }
-/* Jost's own bullet glyph is tiny and rides high, so the marker is drawn:
-   a dot that echoes the ring motifs elsewhere, sized and placed against the
-   first line's baseline. Wrapped lines align under the text, not the marker. */
-ul.st-bullets li{ position:relative; padding-left:8pt; }
-ul.st-bullets li + li{ margin-top:2.5pt; }
-ul.st-bullets li::before{
-  content:"";
-  position:absolute; left:.6pt; top:4.6pt;
-  width:2.3pt; height:2.3pt; border-radius:50%;
-  background:var(--purple);
-}
+.st-langsub { font-weight:400; letter-spacing:0;       color:var(--ink);         --fix:.850;  }
 
 .ar{ font-family:"Noto Naskh Arabic", serif; color:var(--ink-black); --fix:.484; }
 
@@ -146,18 +129,6 @@ ul.st-bullets li::before{
   height:calc(var(--h) * 1pt);
   background:var(--bg, var(--card));
   border-radius:6pt;
-}
-
-/* Narrative sections carry no fill — a hairline under the heading gives them
-   structure and the whitespace does the separating. Only the small utility
-   panels stay tinted. */
-.rule{
-  position:absolute;
-  left:calc(var(--x) * 1pt);
-  top:calc(var(--y) * 1pt);
-  width:calc(var(--w) * 1pt);
-  height:.7pt;
-  background:var(--rule);
 }
 
 .img{
