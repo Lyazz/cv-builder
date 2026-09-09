@@ -115,18 +115,17 @@ The card needs about **7 pt more height** to take it — extend the bottom edge 
 
 **NexSync POS / Nokhba Store / Matima App** — no change. They're genuine work and they fill the column; dropping them leaves page 2 two-thirds empty.
 
-**Languages card — grows to carry two certificate QR codes.** Bars and their fills are unchanged. Below the Spanish bar, add a "Click or Scan" label and two QR codes in the page-2 style (purple `#6153A3`, ~36 pt square), each captioned at 5 pt over two lines:
+**Languages card — grows to carry two certificate QR codes.** Bars and their fills are unchanged. Below the Spanish bar, add a "Click or Scan" label and three QR codes in the page-2 style (purple `#6153A3`, ~36 pt square), each captioned at 5 pt over two lines:
 
 | QR | Caption | Links to |
 |---|---|---|
-| 1 | French / TCF SO - C2 | *link pending* |
-| 2 | English / EF SET C2 - EnglishScore B2 | *link pending* |
+| 1 | French / TCF SO - C2 | `https://yazidaitallala.com/certifications/french.pdf` |
+| 2 | English / EF SET C2 | `https://yazidaitallala.com/certifications/english1.pdf` |
+| 3 | English / EnglishScore B2 | `https://yazidaitallala.com/certifications/english2.pdf` |
 
-Also add the small grey level labels **NATIVE** after Arabic and **BASIC** after Spanish, matching the existing "TCF SO C2" / "EF SET C2" treatment.
+Three codes, 38 pt square, at x 340 / 412 / 484. Encode them at **error-correction level M** — on URLs this length that lands on a 33-module grid, matching the density of the project codes above, and keeps each module near 0.4 mm so a phone can actually read them off paper.
 
-Extend the card to fit (roughly 198 pt tall, from 144) and move the **Interests card down 54 pt**. Interests content itself is unchanged.
-
-> ⚠️ In the draft PDF both language QR codes point at yazidaitallala.com as a placeholder. Yazid is supplying the two real certificate links — don't ship without them.
+> ⚠️ The three certificate PDFs are not live yet — all three URLs 404 at the time of writing. Confirm they resolve before this goes out.
 
 ---
 
@@ -146,5 +145,6 @@ Photo, purple arch, corner triangle, ring grids, contact card, page-1 QR panel, 
 | Page 2 · NexSync | `http://yazidaitallala.com/projects/2` |
 | Page 2 · Matima | `http://yazidaitallala.com/projects/4` |
 | Page 2 · Nokhba | `https://nokhba-store.vercel.app` |
-| Page 2 · French cert | *pending* |
-| Page 2 · English cert | *pending* |
+| Page 2 · French cert | `https://yazidaitallala.com/certifications/french.pdf` |
+| Page 2 · English cert 1 | `https://yazidaitallala.com/certifications/english1.pdf` |
+| Page 2 · English cert 2 | `https://yazidaitallala.com/certifications/english2.pdf` |
