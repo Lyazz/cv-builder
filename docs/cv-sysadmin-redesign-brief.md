@@ -3,7 +3,7 @@
 **From:** Yazid AITALLALA
 **Reference:** `Yazid-AITALLALA-SysAdmin-draft.pdf` (same folder) — a rendered draft of everything below, if you'd rather look than read.
 
-The design does not change. Copy changes throughout, and three blocks need restructuring: the skills card, the education card and the languages card.
+The design does not change. Copy changes throughout; the skills, education and languages cards need restructuring; the portrait is replaced; and all six section headings should be set uppercase and positioned the way EXPERIENCE is — baseline 3.43 pt below the top edge of their card, straddling it. In the current file EXPERIENCE and PERSONAL PROJECTS straddle their cards while SKILLS, EDUCATION and LANGUAGES sit 15–30 pt inside, which is what makes them look mismatched.
 
 ---
 
@@ -129,9 +129,13 @@ Three codes, 38 pt square, at x 340 / 412 / 484. Encode them at **error-correcti
 
 ---
 
-## 7. Nothing else changes
+## 7. Portrait
 
-Photo, purple arch, corner triangle, ring grids, contact card, page-1 QR panel, footers and page numbers all stay exactly as they are.
+**New headshot** — Yazid is supplying the file. Cut it out against the white studio background and drop it into the existing photo frame unchanged: 217.97 × 361.44 pt at x 59.03, y 44.35 (trim space), i.e. a 0.603 aspect. Frame it the way the current one is framed — head flush near the top edge so it sits inside the purple arch, crop centred on the head rather than the body, arms clipped at the frame sides, and the lower torso running behind the contact card.
+
+## 8. Nothing else changes
+
+Purple arch, corner triangle, ring grids, contact card, page-1 QR panel, footers and page numbers all stay exactly as they are.
 
 ---
 
