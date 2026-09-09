@@ -171,14 +171,32 @@ body{
   border-bottom:65.41pt solid var(--purple);
 }
 
-/* purple arch behind the portrait: a rectangle closed by a half-circle */
+/* The portrait sits on white: cutting curly hair against a colour field
+   leaves a fringe, and against white the fringe is invisible. The purple
+   weight moves into shapes placed clear of the hair, which occupies
+   x 94..241, y 54..215 in trim space.
+
+   Same arch as the original — rectangle closed by a half-circle — bled off
+   the left edge instead of the top, so it clears the hair by ~13 pt. */
 .arch{
   position:absolute;
-  left:68.78pt; top:-1.72pt;
-  width:202.44pt; height:181.85pt;
+  left:-20pt; top:-1.72pt;
+  width:102pt; height:211.85pt;
   background:var(--purple);
-  border-radius:0 0 101.22pt 101.22pt;
+  border-radius:0 0 51pt 51pt;
 }
+
+/* ring accents in the white to the right of the head */
+.ring{
+  position:absolute;
+  left:calc(var(--x) * 1pt);
+  top:calc(var(--y) * 1pt);
+  width:calc(var(--d) * 1pt);
+  height:calc(var(--d) * 1pt);
+  border:calc(var(--sw, 2.5) * 1pt) solid var(--purple);
+  border-radius:50%;
+}
+.ring--solid{ background:var(--purple); border:0; }
 
 /* ------------------------------------------------------------ QR + panels */
 

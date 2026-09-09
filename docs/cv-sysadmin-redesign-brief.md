@@ -129,9 +129,15 @@ Three codes, 38 pt square, at x 340 / 412 / 484. Encode them at **error-correcti
 
 ---
 
-## 7. Portrait
+## 7. Portrait — and the arch moves
 
-**New headshot** — Yazid is supplying the file. Cut it out against the white studio background and drop it into the existing photo frame unchanged: 217.97 × 361.44 pt at x 59.03, y 44.35 (trim space), i.e. a 0.603 aspect. Frame it the way the current one is framed — head flush near the top edge so it sits inside the purple arch, crop centred on the head rather than the body, arms clipped at the frame sides, and the lower torso running behind the contact card.
+**New headshot**, and the purple arch no longer sits behind it.
+
+Cutting curly hair against a colour field leaves a pale fringe wherever the matte is soft. Rather than fight it, the portrait now sits on **white**, where that fringe is invisible, and the purple weight moves into shapes placed clear of the hair. In trim space the hair occupies **x 94–241, y 54–215**; everything below is decided by that box.
+
+- **Portrait** — same frame as before: 217.97 × 361.44 pt at x 59.03, y 44.35 (0.603 aspect). Head flush near the top edge, crop centred on the head rather than the body, arms clipped at the frame sides, lower torso running behind the contact card.
+- **Arch** — the same shape as the original (rectangle closed by a half-circle), bled off the **left** edge instead of the top: x −20 → 82, y −1.72 → 210, bottom radius 51. Clears the hair by ~13 pt.
+- **Ring accents** in the white to the right of the head, echoing the ring-grid motif: ø 40 outline (2.5 pt) at x 250, y 140 · ø 9 solid at x 262, y 192 · ø 22 outline (2 pt) at x 253, y 212. All sit in the gutter between the head and the right column, and deliberately below the name so they don't crowd it.
 
 ## 8. Nothing else changes
 
