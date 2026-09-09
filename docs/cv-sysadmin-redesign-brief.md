@@ -48,7 +48,7 @@ Subtitle stays **Full-Stack Developer** at the current 12 pt / +150 tracking —
 
 Replace the paragraph. Fits the existing 6-line box at 7 pt / 11 pt leading:
 
-> Full-stack developer with an Information Systems Engineering degree and over five years of experience building and running production software. Alongside development I administer the infrastructure my SaaS platform runs on — Linux servers, Docker, PostgreSQL and AWS — and designed its encryption architecture and data protection compliance. Academic grounding in Windows Server, Active Directory and networking (Cisco Packet Tracer / CCNA).
+> Full-stack developer with an Information Systems Engineering degree and over five years of programming experience (Dart/Flutter, Java, PHP, Python, JavaScript). Founder of Swekly.com, a multi-tenant e-commerce SaaS where I handle systems administration alongside the code: Linux servers, Docker, PostgreSQL and AWS, plus its encryption architecture and data protection compliance. Grounded in Windows Server, Active Directory and networking (CCNA).
 
 ---
 
