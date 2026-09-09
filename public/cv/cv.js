@@ -39,7 +39,7 @@
 
   function paintQrCodes() {
     Array.prototype.forEach.call(document.querySelectorAll('.qr'), function (box) {
-      var url = box.getAttribute('data-url') || '';
+      var url = box.getAttribute('href') || '';
       var color = box.getAttribute('data-color') || '#231f20';
       var ec = box.getAttribute('data-ec') || 'M';
       if (!url) { box.innerHTML = ''; return; }
@@ -55,12 +55,9 @@
       }
       img.src = qrDataUri(url, color, ec);
 
-      // page-1 codes are real links in the original PDF; keep them clickable
-      if (!box.dataset.linked) {
-        box.dataset.linked = '1';
-        box.style.cursor = 'pointer';
-        box.addEventListener('click', function () { window.open(url, '_blank', 'noopener'); });
-      }
+      // the anchor itself carries the link, in the page and in the exported PDF
+      box.target = '_blank';
+      box.rel = 'noopener';
     });
   }
 

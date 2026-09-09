@@ -193,6 +193,7 @@ body{
 
 .qr{
   position:absolute;
+  display:block;
   left:calc(var(--x) * 1pt);
   top:calc(var(--y) * 1pt);
   width:calc(var(--w) * 1pt);
