@@ -16,7 +16,6 @@ The design does not change. Copy changes throughout; the skills, education and l
 | Purple | `#6152A3` (a few objects use `#6153A3` — same ink) |
 | Body grey | `#6D6E71` / `#6D6F72` · profile paragraph `#6B6B6B` |
 | Card fill | `#F5F6F7` (page 1) · `#F5F6F8` (page 2) · corner radius **6 pt** |
-| Language-bar track | `#D1D3D4`, 4 pt stroke, 150.6 pt long |
 | Page number ink | `#231F20` |
 
 **Type scale in use** (size / tracking in 1/1000 em):
@@ -115,7 +114,20 @@ The card needs about **7 pt more height** to take it — extend the bottom edge 
 
 **NexSync POS / Nokhba Store / Matima App** — no change. They're genuine work and they fill the column; dropping them leaves page 2 two-thirds empty.
 
-**Languages card — grows to carry two certificate QR codes.** Bars and their fills are unchanged. Below the Spanish bar, add a "Click or Scan" label and three QR codes in the page-2 style (purple `#6153A3`, ~36 pt square), each captioned at 5 pt over two lines:
+**Languages card — the proficiency bars go, and it grows to carry three certificate QR codes.**
+
+**Delete the four bars.** They quantify something that isn't quantifiable, and the real evidence is sitting right beside them. Each row becomes name / level / certificate:
+
+| Language | Level | Certificate |
+|---|---|---|
+| French | C2 | TCF SO |
+| English | C2 | EF SET |
+| Arabic | Native | |
+| German | A1 | |
+
+Name at x 328.5 (7 pt, body grey) · level at x 393 (6.8 pt, purple) · certificate at x 412 (5 pt, body grey). Rows keep their 21 pt pitch at baselines 393.7 / 414.7 / 435.7 / 456.7.
+
+Below them, a "Click or Scan" label and three QR codes in the page-2 style (purple `#6153A3`, 38 pt square), each captioned at 5 pt over two lines:
 
 | QR | Caption | Links to |
 |---|---|---|
@@ -123,7 +135,7 @@ The card needs about **7 pt more height** to take it — extend the bottom edge 
 | 2 | English / EF SET C2 | `https://yazidaitallala.com/certifications/english1.pdf` |
 | 3 | English / EnglishScore B2 | `https://yazidaitallala.com/certifications/english2.pdf` |
 
-Three codes, 38 pt square, at x 340 / 412 / 484. Encode them at **error-correction level M** — on URLs this length that lands on a 33-module grid, matching the density of the project codes above, and keeps each module near 0.4 mm so a phone can actually read them off paper.
+Three codes at x 340 / 412 / 484. Encode them at **error-correction level M** — on URLs this length that lands on a 33-module grid, matching the density of the project codes above, and keeps each module near 0.4 mm so a phone can actually read them off paper.
 
 > ⚠️ The three certificate PDFs are not live yet — all three URLs 404 at the time of writing. Confirm they resolve before this goes out.
 
