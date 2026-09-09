@@ -1,7 +1,9 @@
-# CV update brief — Systems Administrator version
-**For:** designer working on the source file for `lyazzcv_NEW.pdf`
+# CV update brief — Systems Administrator application
+**For:** designer holding the master file for `lyazzcv_NEW.pdf`
 **From:** Yazid AITALLALA
-**Goal:** repoint the same 2-page layout at a **Systems Administrator** application. Design stays as-is; copy and three blocks need restructuring.
+**Reference:** `Yazid-AITALLALA-SysAdmin-draft.pdf` (same folder) — a rendered draft of everything below, if you'd rather look than read.
+
+The design does not change. Copy changes throughout, and three blocks need restructuring: the skills card, the education card and the languages card.
 
 ---
 
@@ -12,7 +14,7 @@
 | Page size | **216 × 303 mm** = A4 (210 × 297) + **3 mm bleed**, crop marks present |
 | Typeface | **Jost** — three weights in use: Light 300, Regular 400, SemiBold 600 |
 | Purple | `#6152A3` (a few objects use `#6153A3` — same ink) |
-| Body grey | `#6D6E71` / `#6D6F72` · summary paragraph `#6B6B6B` |
+| Body grey | `#6D6E71` / `#6D6F72` · profile paragraph `#6B6B6B` |
 | Card fill | `#F5F6F7` (page 1) · `#F5F6F8` (page 2) · corner radius **6 pt** |
 | Language-bar track | `#D1D3D4`, 4 pt stroke, 150.6 pt long |
 | Page number ink | `#231F20` |
@@ -22,7 +24,7 @@
 | Style | Size | Weight | Tracking | Leading |
 |---|---|---|---|---|
 | Name | 30 | 400 | +25 | — |
-| Job subtitle | 12 | 400 | **+150** | — |
+| Job subtitle | 12 | 400 | +150 | — |
 | Section heading (EXPERIENCE, SKILLS…) | 14 | 400 | +50 | — |
 | Entry title (Freelancer, Swekly SaaS…) | 10.14 | **600** | +60 | — |
 | Education entry title | 10.14 | **600** | +7 | 12 |
@@ -36,66 +38,58 @@
 
 ---
 
-## 1. Global copy changes
+## 1. Header
 
-| Where | From | To |
-|---|---|---|
-| Subtitle (both pages) | Full-Stack Software Engineer | **Systems Administrator \| Full-Stack Developer** |
-| Contact card, city | Algiers, Algeria. | **Béjaïa, Algeria.** |
-| Page footer, city (both pages) | Algiers, Algeria | **Béjaïa, Algeria** |
-
-⚠️ **Subtitle width.** At the current 12 pt / +150 tracking the new subtitle runs ~300 pt — it will overflow the right column (usable width ≈ 250 pt). Two options, your call:
-- **A (preferred):** keep the airy look, drop tracking to **+55** so the line matches the current 191 pt width.
-- **B:** set the subtitle to **"Systems Administrator"** only and leave tracking at +150.
+Subtitle stays **Full-Stack Developer** at the current 12 pt / +150 tracking — no change to the styling, just the wording. Location stays **Algiers, Algeria** in the contact card and both page footers. (D-Soft Solutions' own line keeps **Béjaia** — that's the employer's office, not his.)
 
 ---
 
 ## 2. Profile paragraph (page 1, right column)
 
-Replace the whole paragraph. Box is 6 lines at 7 pt / 11 pt leading — this copy is cut to fit:
+Replace the paragraph. Fits the existing 6-line box at 7 pt / 11 pt leading:
 
-> IT professional with an Information Systems Engineering degree and over four years of hands-on full-stack experience, now focused on systems administration. Academic foundation in Windows Server, Active Directory and networking (Cisco Packet Tracer / CCNA), with production experience running Linux servers, Docker containers and AWS infrastructure for a multi-tenant SaaS platform. Designed enterprise-grade encryption architecture and handled real-world data protection compliance.
+> Full-stack developer with an Information Systems Engineering degree and over five years of experience building and running production software. Alongside development I administer the infrastructure my SaaS platform runs on — Linux servers, Docker, PostgreSQL and AWS — and designed its encryption architecture and data protection compliance. Academic grounding in Windows Server, Active Directory and networking (Cisco Packet Tracer / CCNA).
 
 ---
 
-## 3. SKILLS card — **restructure** (biggest change)
+## 3. SKILLS card — **restructure to five groups**
 
-The card currently holds 3 groups + a Flutter/Java/JS logo strip. The new skill set is 4 groups and does not fit alongside the logos.
+**Delete the Flutter / Java / JS logo strip.** Five groups need the space, and those marks argue for a developer on a CV that has to argue for infrastructure work.
 
-**Ask: delete the Flutter / Java / JS logo strip.** It reads as a developer signal and the space is needed. (If you want to keep a logo row, the sysadmin-appropriate marks would be Linux / Docker / Windows Server — but they'd need sourcing.)
-
-New content, same card, same styles — 4 groups, list lines at 7.78 pt / 10 pt leading (tighten from 12 pt to fit):
+Set the gap between groups to **15 pt** (from 18 pt) so all five fit the existing card. Group titles and list lines keep their current styles.
 
 **Systems & Virtualization**
 Linux server administration (Ubuntu/Debian) - Windows Server & Active Directory - Docker (production) - Kubernetes (fundamentals) - VMware / VirtualBox
 
 **Networking & Security**
-TCP/IP - routing & switching - firewall configuration - WAF/ADC concepts - Cisco Packet Tracer / CCNA fundamentals - network troubleshooting
+TCP/IP - Routing & switching - Firewall configuration - WAF / ADC concepts - Cisco Packet Tracer / CCNA fundamentals - Network troubleshooting
 
 **Storage, Backup & Cryptography**
-RAID configurations - backup & recovery strategies - AES-256-GCM - Argon2id - envelope encryption - HMAC-based indexing
+RAID configurations - Backup & recovery strategies - AES-256-GCM - Argon2id - Envelope encryption - HMAC-based indexing
 
 **Cloud, Databases & Programming**
-AWS (S3) - Git - CI/CD - PostgreSQL - MySQL - Supabase - Dart/Flutter - Java - PHP - JavaScript - Python - C++
+AWS (S3) - Git - CI/CD - PostgreSQL - MySQL - Supabase - Dart / Flutter - Java - PHP - JavaScript - Python - C++
+
+**Other**
 IoT / Arduino - PCB design - 3D design (AutoCAD, Tinkercad)
 
 ---
 
 ## 4. EXPERIENCE card — new bullets
 
-Keep the three roles, titles, dates and the D-Soft / Sonatrach logos. Replace the bullet text.
+Keep the three roles, their titles, dates and the D-Soft / Sonatrach logos. Replace the bullet text only.
 
-**Freelancer — Lead Developer & Founder — 2023 - present** *(needs ~10 lines; currently 9 — see note)*
-- Architected and operate the backend infrastructure for Swekly.com (MySaaS), a multi-tenant e-commerce SaaS platform: PostgreSQL administration, AWS S3 storage, Linux/Docker deployment.
+**Freelancer — Lead Developer & Founder — 2023 - present**
+- Architected and operate the backend infrastructure for Swekly.com (MySaaS), a multi-tenant e-commerce SaaS platform: PostgreSQL administration, AWS S3 storage and Linux/Docker deployment.
 - Designed and implemented an enterprise-grade encryption architecture (AES-256-GCM, Argon2id, envelope encryption, blind HMAC indexing) protecting multi-tenant customer data.
 - Managed data protection compliance under Algerian law (loi 25-11) and ANPDP requirements, including a local PII hosting architecture.
-- Handled end-to-end technical operations — server deployment, monitoring and release management.
+- Handled end-to-end technical operations: server deployment, monitoring and release management.
 
-> Note: this is ~1 line longer than the current block. Gaining the line: pull the "Mobile applications developer" entry down by 12 pt, the card has the room.
+> This runs one line longer than the current block. The card has the room — pull the "Mobile applications developer" entry down by 12 pt.
 
-**Mobile applications developer — D-Soft Solutions. Béjaïa, Algeria — May 2021 – April 2023**
+**Mobile applications developer — D-Soft Solutions. Béjaia, Algeria — May 2021 – April 2023**
 - Built and maintained cross-platform POS applications (Flutter, Java) with integrated database and inventory systems.
-- Designed custom IoT devices with proprietary PCB circuits and 3D-printed enclosures — hands-on embedded and hardware experience.
+- Designed custom IoT devices with proprietary PCB circuits and 3D-printed enclosures: hands-on embedded and hardware experience.
 - Developed full-stack e-commerce websites and internal supplier evaluation platforms.
 
 **Intern — Sonatrach refinery. Algiers, Algeria — January 2019 - June 2019**
@@ -105,28 +99,40 @@ Keep the three roles, titles, dates and the D-Soft / Sonatrach logos. Replace th
 
 ## 5. Education card — **add a coursework line**
 
-This is the block that proves the sysadmin foundation, so it should not be cut. Add under the "2019" date, at **6.2 pt / 7.6 pt leading**, body grey:
+This block is what evidences the systems background, so it should not be cut. Add it under the "2019" date at **6.2 pt / 7.6 pt leading**, body grey:
 
-> **Relevant coursework:** Windows Server Administration, Active Directory, Computer Networks (Cisco Packet Tracer / CCNA fundamentals), Network Security & Cryptography, Database Systems
+> Relevant coursework: Windows Server Administration, Active Directory, Computer Networks (Cisco Packet Tracer / CCNA fundamentals), Network Security & Cryptography, Database Systems.
 
-The card needs about **20 pt more height** to take it — extend the bottom edge from y 755 to ~y 760 (trim space) and tighten the gap between the heading and the first entry by ~2 pt. Everything else in the card stays.
+The card needs about **7 pt more height** to take it — extend the bottom edge and pull the Bachelor's block up ~4 pt to open the gap.
 
 ---
 
 ## 6. Page 2
 
-- **Swekly SaaS** — replace the description and tech line, keep the project type and QR:
-  - *Description:* A multi-tenant e-commerce platform for the Algerian market with fully isolated store environments, centralized admin, and an encrypted tenant-data architecture. Backend runs on PostgreSQL with AWS S3 storage and Linux/Docker-based deployment, with server-side rendering for SEO and localized delivery integrations.
-  - *Used Technologies:* Nuxt 3, Vue 3, Express, Prisma ORM, PostgreSQL, AWS S3, Docker, REST APIs.
-- **NexSync POS / Nokhba Store / Matima App** — leave as they are. They're genuine and fill the column; dropping them would leave page 2 half empty.
-- **Languages** — labels stay, add the level wording: French (C2 – TCF SO), English (C2 – EF SET), Arabic (Native), Spanish (Basic). Bar fills are already correct.
-- **Interests** — no change.
+**Swekly SaaS** — replace the description and tech line; project type and QR stay:
+- *Description:* A multi-tenant e-commerce platform built for the Algerian market, with fully isolated store environments per retailer, a centralized administrative suite and an encrypted tenant-data architecture. The backend runs on PostgreSQL with AWS S3 object storage and Linux/Docker-based deployment; the storefront engine uses server-side rendering for SEO and carries localized delivery integrations and multi-language support. Customer data is protected with AES-256-GCM envelope encryption and blind HMAC indexing.
+- *Used Technologies:* Nuxt 3, Vue 3, Express, Prisma ORM, PostgreSQL, AWS S3, Docker, REST APIs.
+
+**NexSync POS / Nokhba Store / Matima App** — no change. They're genuine work and they fill the column; dropping them leaves page 2 two-thirds empty.
+
+**Languages card — grows to carry two certificate QR codes.** Bars and their fills are unchanged. Below the Spanish bar, add a "Click or Scan" label and two QR codes in the page-2 style (purple `#6153A3`, ~36 pt square), each captioned at 5 pt over two lines:
+
+| QR | Caption | Links to |
+|---|---|---|
+| 1 | French / TCF SO - C2 | *link pending* |
+| 2 | English / EF SET C2 - EnglishScore B2 | *link pending* |
+
+Also add the small grey level labels **NATIVE** after Arabic and **BASIC** after Spanish, matching the existing "TCF SO C2" / "EF SET C2" treatment.
+
+Extend the card to fit (roughly 198 pt tall, from 144) and move the **Interests card down 54 pt**. Interests content itself is unchanged.
+
+> ⚠️ In the draft PDF both language QR codes point at yazidaitallala.com as a placeholder. Yazid is supplying the two real certificate links — don't ship without them.
 
 ---
 
 ## 7. Nothing else changes
 
-Photo, purple arch, corner triangle, ring grids, QR panel and codes, card positions, footers and page numbers all stay exactly as they are.
+Photo, purple arch, corner triangle, ring grids, contact card, page-1 QR panel, footers and page numbers all stay exactly as they are.
 
 ---
 
@@ -140,3 +146,5 @@ Photo, purple arch, corner triangle, ring grids, QR panel and codes, card positi
 | Page 2 · NexSync | `http://yazidaitallala.com/projects/2` |
 | Page 2 · Matima | `http://yazidaitallala.com/projects/4` |
 | Page 2 · Nokhba | `https://nokhba-store.vercel.app` |
+| Page 2 · French cert | *pending* |
+| Page 2 · English cert | *pending* |
